@@ -13,6 +13,7 @@ class thirdmain : public QDialog
 
 public:
     explicit thirdmain(QWidget *parent = nullptr);
+
     ~thirdmain();
 
 private slots:

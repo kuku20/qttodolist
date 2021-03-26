@@ -5,14 +5,22 @@
 #include <QDebug>
 #include "thirdmain.h"
 #include "mainwindow.h"
+#include <QTextStream>
+QString username;
+QString userID;
 
 secondMain::secondMain(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::secondMain)
 {
-    ui->setupUi(this);
-//    ui->label_userdb->setText(userN);
 
+    ui->setupUi(this);
+    this->setWindowTitle("USER Catalog");
+}
+void secondMain::userreturn(QString userReturn,QString userRID){
+    ui->label_userdb->setText(userReturn);
+    username=userReturn;
+    userID=userRID;
 }
 
 secondMain::~secondMain()
@@ -23,6 +31,9 @@ secondMain::~secondMain()
 void secondMain::on_pushButton_clicked()
 {
     bool ok;
+
+        qDebug()<<"in 1 click"<<username;
+        qDebug()<<"username Id:"<<userID;
        QString catalogI = QInputDialog::getText(this, tr("Wellcome to create new datalog: "),
                                                tr("Input the catalog name:"), QLineEdit::Normal,
                                                tr("none"), &ok);
@@ -37,6 +48,8 @@ void secondMain::on_pushButton_clicked()
 void secondMain::on_pushButton_2_clicked()
 {
     QMessageBox::information(this, "Show the data", "There are all the data");
+    qDebug()<<"username Id:"<<userID;
+    //get the userID then user the queryF
     hide();
 //    Tasklist = new tasklist(this);
 //    Tasklist->show();

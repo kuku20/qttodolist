@@ -1,33 +1,36 @@
-/*
+
 
 #include "queryoption.h"
 #include <iostream>
 #include <windows.h>
 #include <sstream>
 #include <string>
+#include "mainwindow.h"
 
 #include <iomanip>
 using namespace std;
-
 
 //* create users table in mysql database, it will also create catalog and list table
 //* id is the primary key of this table
 //* @param none
 //* @return none
+QSqlDatabase db = QSqlDatabase::database();
+QSqlQuery query(db);
 
 void queryOption::createUser() {
-    sqlQuery = "CREATE TABLE IF NOT EXISTS users ("
-        "email varchar(50) NOT NULL, password varchar(50) NOT NULL, username VARCHAR(50) NOT NULL, id int(11) NOT NULL AUTO_INCREMENT, "
-        "PRIMARY KEY(id))";
-    q = sqlQuery.c_str();
-    qstate = mysql_query(con, q);
-    if (!qstate)
-        cout << "Users table created!" << endl;
-    else
-        cout << "Users table failed to create!" << endl;
+    QSqlQuery query(db);
+    query.prepare("CREATE TABLE IF NOT EXISTS users ("
+            "email varchar(50) NOT NULL, password varchar(50) NOT NULL, username VARCHAR(50) NOT NULL, id int(11) NOT NULL AUTO_INCREMENT, "
+            "PRIMARY KEY(id))");
+            if(query.exec())
+                {
+                    qDebug()<<"Table user created";
+                }
+            else{
+                   qDebug()<<"Cannot Table reated";
+            }
     createCatalog();
 }
-
 
 //* create catalog table for all the todo list, it will also create list table
 //* list_no is the primary key of this table
@@ -35,15 +38,17 @@ void queryOption::createUser() {
 //* @return none
 
 void queryOption::createCatalog() {
-    sqlQuery =	"CREATE TABLE IF NOT EXISTS Catalog ("
-                "id INT NOT NULL, list_no INT NOT NULL, list_name VARCHAR(50) NOT NULL, time DATE NOT NULL,"
-                "PRIMARY KEY(list_no));";
-    q = sqlQuery.c_str();
-    qstate = mysql_query(con, q);
-    if (!qstate)
-        cout << "Users catalog table created!" << endl;
-    else
-        cout << "Users catalog table failed to create!" << endl;
+    QSqlQuery query(db);
+    query.prepare("CREATE TABLE IF NOT EXISTS Catalog ("
+                       "id INT NOT NULL, list_no INT NOT NULL, list_name VARCHAR(50) NOT NULL, time DATE NOT NULL,"
+                       "PRIMARY KEY(list_no));");
+    if(query.exec())
+        {
+            qDebug()<<"Table Catalog created";
+        }
+    else{
+           qDebug()<<"Can't Table Catalog reated";
+    }
     createListTable();
 }
 
@@ -54,48 +59,39 @@ void queryOption::createCatalog() {
 //* @return none
 
 void queryOption::createListTable() {
-    sqlQuery =	"CREATE TABLE IF NOT EXISTS List ("
-                "list_no INT NOT NULL, item_no INT NOT NULL, item_name VARCHAR(50) NOT NULL,"
-                "PRIMARY KEY(item_no));";
-    q = sqlQuery.c_str();
-    qstate = mysql_query(con, q);
-    if (!qstate)
-        cout << "Users list table created!" << endl;
-    else
-        cout << "Users list table failed to create!" << endl;
+    QSqlQuery query(db);
+         query.prepare("CREATE TABLE IF NOT EXISTS task ("
+                       "list_no INT NOT NULL, item_no INT NOT NULL, item_name VARCHAR(50) NOT NULL,"
+                       "PRIMARY KEY(item_no));");
+         if(query.exec())
+             {
+                 qDebug()<<"Table task created";
+             }
+         else{
+                qDebug()<<"Can't Table task reated";
+         }
+
 }
-
-
 //* check if the user, email, or catalog name exist
 //* @param location
 //* @param option
 //* @return exist
-
-int queryOption::checkIfExist(string location, string option) {
-    if (location == "checkcatalog") {
-        sqlQuery = "SELECT list_name FROM catalog WHERE id = " + getID() + "";
-    }
-    else {
-        sqlQuery = "SELECT `" + location + "` FROM `users`";
-    }
-    q = sqlQuery.c_str();
-    qstate = mysql_query(con, q);
+int queryOption::checkIfExist( QString option) {
+    QSqlQuery query(db);
+    query.exec("SELECT * FROM users`");
     int exist = 0;
-    res = mysql_store_result(con);
-    int count = mysql_num_fields(res);
-    while (row = mysql_fetch_row(res)) {
-        for (int i = 0;i < count;i++) {
-            if (option == row[i]) {
-                exist -= 1;
-                //cout<<exit;
-                return exist;
-            }
-        }
-    }
+     while (query.next()) {
+         QString usernamedb = query.value(2).toString();
+         QString emaildb = query.value(0).toString();
+         if(option==usernamedb or option==emaildb){
+             exist -= 1;
+             return exist;
+         }else{
+         }
+     }
     return exist;
-
 }
-
+/*
 
 //* create a new todo list in catalog table
 //* @param user_id the current user's id that can match up in the database

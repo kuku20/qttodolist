@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "thirdmain.h"
 
+
 namespace Ui {
 class secondMain;
 }
@@ -15,6 +16,7 @@ class secondMain : public QDialog
 public:
     explicit secondMain(QWidget *parent = nullptr);
     ~secondMain();
+    void userreturn(QString username,QString userID);
 
 private slots:
     void on_pushButton_clicked();

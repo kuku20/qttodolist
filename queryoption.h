@@ -1,4 +1,4 @@
-/*
+
 #ifndef QUERYOPTION_H
 #define QUERYOPTION_H
 #include <iostream>
@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
+#include<QString>
 using namespace std;
 
 
@@ -23,9 +24,6 @@ class queryOption
         const char* q = "";
         string currentID;
         int qstate = 1;
-        MYSQL* con;
-        MYSQL_ROW row;
-        MYSQL_RES* res;
     public:
 
 //         the constructor for the queryOption, this will set the initial value for the query
@@ -58,11 +56,11 @@ class queryOption
         void updateList(string newUpdate, string listNo, int option);
         string getNewestListNo();
         void createUser();
-        int checkIfExist(string location, string option);
+        int checkIfExist( QString option);
 };
 
 
 
 #endif // QUERYOPTION_H
 
-*/
+

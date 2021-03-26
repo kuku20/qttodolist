@@ -7,6 +7,7 @@ thirdmain::thirdmain(QWidget *parent) :
     ui(new Ui::thirdmain)
 {
     ui->setupUi(this);
+    this->setWindowTitle("USER task list");
 }
 
 thirdmain::~thirdmain()

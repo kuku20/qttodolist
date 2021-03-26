@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    createnewacount.cpp \
     main.cpp \
     mainwindow.cpp \
     queryoption.cpp \
@@ -16,12 +17,14 @@ SOURCES += \
     thirdmain.cpp
 
 HEADERS += \
+    createnewacount.h \
     mainwindow.h \
     queryoption.h \
     secondmain.h \
     thirdmain.h
 
 FORMS += \
+    createnewacount.ui \
     mainwindow.ui \
     secondmain.ui \
     thirdmain.ui
