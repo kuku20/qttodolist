@@ -6,6 +6,7 @@
 #include "thirdmain.h"
 #include "mainwindow.h"
 #include <QTextStream>
+
 QString username;
 QString userID;
 
@@ -15,12 +16,18 @@ secondMain::secondMain(QWidget *parent) :
 {
 
     ui->setupUi(this);
-    this->setWindowTitle("USER Catalog");
+//    queryOption queryOption;
+//    username=queryOption.getID();
+    ui->label_userdb->setText(username);
+//    this->setWindowTitle("USER Catalog");
+    this->setWindowTitle("secondmain");
 }
 void secondMain::userreturn(QString userReturn,QString userRID){
     ui->label_userdb->setText(userReturn);
     username=userReturn;
     userID=userRID;
+    queryOption queryOption;
+    queryOption.accessID(userID,username);
 }
 
 secondMain::~secondMain()
@@ -51,8 +58,6 @@ void secondMain::on_pushButton_2_clicked()
     qDebug()<<"username Id:"<<userID;
     //get the userID then user the queryF
     hide();
-//    Tasklist = new tasklist(this);
-//    Tasklist->show();
     thirdmain thirdmain;
     thirdmain.setModal(true);
     thirdmain.exec();

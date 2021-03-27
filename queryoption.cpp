@@ -9,7 +9,8 @@
 
 #include <iomanip>
 using namespace std;
-
+QString currentUser;
+QString currentID;
 //* create users table in mysql database, it will also create catalog and list table
 //* id is the primary key of this table
 //* @param none
@@ -91,6 +92,32 @@ int queryOption::checkIfExist( QString option) {
      }
     return exist;
 }
+// set and store the current user id to the system
+// @param user_id the current user id
+// @return none
+
+void queryOption::accessID(QString user_id,QString user_N) {
+    currentUser = user_N;
+    currentID = user_id;
+    qDebug()<<"Can't Table task reated"<<currentUser;
+}
+
+
+//return the user id to identify the current user
+//@param none
+// @return temp current user id
+
+QString queryOption::getID() {
+    QString temp = currentID;
+    return temp;
+
+}
+QString queryOption::getUsername() {
+    QString temp = currentUser;
+    return temp;
+
+}
+
 /*
 
 //* create a new todo list in catalog table
@@ -174,23 +201,6 @@ string queryOption::genItemNo() {
 }
 
 
-// set and store the current user id to the system
-// @param user_id the current user id
-// @return none
-
-void queryOption::accessID(string user_id) {
-    currentID = user_id;
-}
-
-
-//return the user id to identify the current user
-//@param none
-// @return temp current user id
-
-string queryOption::getID() {
-    string temp = currentID;
-    return temp;
-}
 
 
 //*display all the todo list the current user has in the catalog table

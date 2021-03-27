@@ -22,9 +22,11 @@ class queryOption
     private:
         string sqlQuery;
         const char* q = "";
-        string currentID;
+
+
         int qstate = 1;
     public:
+
 
 //         the constructor for the queryOption, this will set the initial value for the query
 //         @param *conn the real connection from database
@@ -46,8 +48,9 @@ class queryOption
         void newItem(string list_no, string item_name);
         string genListNo();
         string genItemNo();
-        void accessID(string user_id);
-        string getID();
+        void accessID(QString user_id, QString user_N);
+        QString getID();
+        QString getUsername();
         void getLists();
         void getItems(string listNo);
         void delItem(string itemNo);

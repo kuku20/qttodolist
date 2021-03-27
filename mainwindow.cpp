@@ -5,6 +5,7 @@
 #include "queryoption.h"
 #include "createnewacount.h"
 
+//
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -24,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
           ui->label->setText("NOT connected:");
      }
        QSqlQuery query(db);
-       queryOption queryOption;
+queryOption queryOption;
        queryOption.createUser();
 }
 
@@ -52,25 +53,18 @@ void MainWindow::on_pushButton_clicked()
                 QMessageBox::information(this, "Login", "You are login!!");
                 userlogined=true;
                 close();
-//                QString Iduser= query.value(3).toString();
                 secondMain secondMain;
                 secondMain.userreturn(username,query.value(3).toString());
                 secondMain.setModal(true);
                 secondMain.exec();
                 break;
             }
-
-
         }
     if(userlogined==false){
         QMessageBox::warning(this,"Login","Username or password is not correct");
 
     }
-
-
 }
-
-
 
 void MainWindow::on_pushButton_2_clicked()
 {

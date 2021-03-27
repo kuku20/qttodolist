@@ -14,6 +14,7 @@ SOURCES += \
     mainwindow.cpp \
     queryoption.cpp \
     secondmain.cpp \
+    task_dialog.cpp \
     thirdmain.cpp
 
 HEADERS += \
@@ -21,12 +22,14 @@ HEADERS += \
     mainwindow.h \
     queryoption.h \
     secondmain.h \
+    task_dialog.h \
     thirdmain.h
 
 FORMS += \
     createnewacount.ui \
     mainwindow.ui \
     secondmain.ui \
+    task_dialog.ui \
     thirdmain.ui
 
 # Default rules for deployment.
