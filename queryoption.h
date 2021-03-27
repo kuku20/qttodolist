@@ -1,7 +1,9 @@
 
 #ifndef QUERYOPTION_H
 #define QUERYOPTION_H
-#include "mainwindow.h"
+#include<QtSql>
+#include <QSqlQuery>
+#include <QSqlDatabase>
 #include <QMessageBox>
 #include <QDebug>
 
@@ -19,6 +21,8 @@ class queryOption
         static QString sqlQuery;
         static QString currentID;
         static QSqlQuery qry;
+        static QString currentUser;
+        static QString inputNumber;
     public:
         //headers
         void static setCon();
@@ -38,6 +42,10 @@ class queryOption
         void delList(QString listNo);
         void updateTask(QString newUpdate, QString itemNo);
         void updateList(QString newUpdate, QString listNo);
+        void static accessUser(QString user_name);
+        static QString getUser();
+        void static setInputNo(QString inNum);
+        static QString getInputNo();
 };
 
 
