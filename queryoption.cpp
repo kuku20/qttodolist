@@ -1,4 +1,4 @@
-#include <queryOption.h>
+#include "queryOption.h"
 #include <QMessageBox>
 #include <QDebug>
 
