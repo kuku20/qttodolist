@@ -1,13 +1,9 @@
-/*
+
 #ifndef QUERYOPTION_H
 #define QUERYOPTION_H
-#include <iostream>
-#include <windows.h>
-#include <sstream>
-#include <string>
-#include <iomanip>
-using namespace std;
-
+#include "mainwindow.h"
+#include <QMessageBox>
+#include <QDebug>
 
 // This class as database management system contains several functions to send the query to the mysql database
 // these function allows the system creating tables, creating todo list and task items, update names, and delete todo list or task items
@@ -19,50 +15,33 @@ using namespace std;
 class queryOption
 {
     private:
-        string sqlQuery;
-        const char* q = "";
-        string currentID;
-        int qstate = 1;
-        MYSQL* con;
-        MYSQL_ROW row;
-        MYSQL_RES* res;
+        static QSqlDatabase dbConnection;
+        static QString sqlQuery;
+        static QString currentID;
+        static QSqlQuery qry;
     public:
-
-//         the constructor for the queryOption, this will set the initial value for the query
-//         @param *conn the real connection from database
-//         @note con the real connection from database and used in the queryOption to connect the database
-//         @note row the row fetch from database table, the default set as NULL
-//         @note res the query result get from the database table, the default set as NULL
-//         @note currentID the current user id that used in the queryOption, the default set as ""
-
-//        queryOption(MYSQL *conn) {
-//            con = conn;
-//            row = NULL;
-//            res = NULL;
-//            currentID = "";
-//        }
         //headers
-        void createCatalog();
-        void createListTable();
-        void newList(string user_id, string list_name, string dd, string mm, string yyyy);
-        void newItem(string list_no, string item_name);
-        string genListNo();
-        string genItemNo();
-        void accessID(string user_id);
-        string getID();
-        void getLists();
-        void getItems(string listNo);
-        void delItem(string itemNo);
-        void delList(string listNo);
-        void updateItem(string newUpdate, string itemNo);
-        void updateList(string newUpdate, string listNo, int option);
-        string getNewestListNo();
-        void createUser();
-        int checkIfExist(string location, string option);
+        void static setCon();
+        void static setCon(QSqlDatabase conn);
+        void static createUser();
+        void static createCatalog();
+        void static createTaskTable();
+        void newList(QString list_name, QString dateInsert);
+        void newTask(QString list_no, QString item_name);
+        QString genListNo();
+        QString genTaskNo();
+        void static accessID(QString user_id);
+        static QString getID();
+        QString getLists();
+        QString getTasks(QString listNo);
+        void delTask(QString itemNo);
+        void delList(QString listNo);
+        void updateTask(QString newUpdate, QString itemNo);
+        void updateList(QString newUpdate, QString listNo);
 };
 
 
 
 #endif // QUERYOPTION_H
 
-*/
+
