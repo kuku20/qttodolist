@@ -37,7 +37,7 @@
      <rect>
       <x>140</x>
       <y>320</y>
-      <width>93</width>
+      <width>121</width>
       <height>28</height>
      </rect>
     </property>
@@ -54,7 +54,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>110</y>
+      <y>120</y>
       <width>331</width>
       <height>181</height>
      </rect>
@@ -67,7 +67,7 @@
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>81</width>
+       <width>101</width>
        <height>16</height>
       </rect>
      </property>
@@ -85,7 +85,7 @@
       <rect>
        <x>20</x>
        <y>56</y>
-       <width>71</width>
+       <width>91</width>
        <height>20</height>
       </rect>
      </property>
@@ -101,7 +101,7 @@
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>190</x>
        <y>130</y>
        <width>93</width>
        <height>28</height>
@@ -119,9 +119,9 @@
     <widget class="QLineEdit" name="lineEdit_userInput">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>142</x>
        <y>20</y>
-       <width>113</width>
+       <width>151</width>
        <height>22</height>
       </rect>
      </property>
@@ -129,9 +129,9 @@
     <widget class="QLineEdit" name="lineEdit_passInput">
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>142</x>
        <y>50</y>
-       <width>113</width>
+       <width>151</width>
        <height>22</height>
       </rect>
      </property>

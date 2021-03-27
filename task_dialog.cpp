@@ -1,5 +1,6 @@
 #include "task_dialog.h"
 #include "ui_task_dialog.h"
+#include"queryoption.h"
 
 task_dialog::task_dialog(QWidget *parent) :
     QDialog(parent),
@@ -7,11 +8,34 @@ task_dialog::task_dialog(QWidget *parent) :
 {
     ui->setupUi(this);
      this->setWindowTitle("USER task list__task_dialog.cpp");
-    model = new QStandardItemModel(3,3,this);
+    queryOption queryOption;
+    QSqlDatabase db = QSqlDatabase::database();
+    QSqlQuery q(db);
+
+    QString s=queryOption.getTasks();
+    q.prepare(s);
+    q.exec();
+    model = new QStandardItemModel(q.size(),3,this);
     ui->tableView->setModel(model);
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("cata_no"));
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("task_no"));
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("task_name"));
+    ui->tableView->setModel(model);
+    int row=0;
+    while (q.next()) {
+    {
+        for(int col = 0; col < 3; col++)
+        {
+            QModelIndex index
+                    = model->index(row,col,QModelIndex());
+            // 0 for all data
+
+                model->setData(index,q.value(col).toString());
+            }
+
+        }
+        row++;
+    }
 }
 
 task_dialog::~task_dialog()

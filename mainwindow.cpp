@@ -25,7 +25,8 @@ MainWindow::MainWindow(QWidget *parent)
           ui->label->setText("NOT connected:");
      }
        QSqlQuery query(db);
-queryOption queryOption;
+        queryOption queryOption;
+        queryOption::setCon(db);
        queryOption.createUser();
 }
 
@@ -55,6 +56,8 @@ void MainWindow::on_pushButton_clicked()
                 close();
                 secondMain secondMain;
                 secondMain.userreturn(username,query.value(3).toString());
+                queryOption::accessID(query.value(3).toString());
+                queryOption::setCon(db);
                 secondMain.setModal(true);
                 secondMain.exec();
                 break;

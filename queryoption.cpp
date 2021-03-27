@@ -1,10 +1,12 @@
-#include "queryOption.h"
+
+#include "queryoption.h"
 #include <QMessageBox>
 #include <QDebug>
 
 QSqlDatabase queryOption::dbConnection;
 QString queryOption::sqlQuery;
-QString queryOption::currentID;
+QString queryOption::currentID,queryOption::inputNumber,queryOption::currentUser;
+
 QSqlQuery queryOption::qry;
 
 /**
@@ -14,9 +16,9 @@ QSqlQuery queryOption::qry;
 void queryOption::setCon() {
     dbConnection = QSqlDatabase::addDatabase("QMYSQL");
     dbConnection.setHostName("127.0.0.1");
-    dbConnection.setDatabaseName("todolist");
+    dbConnection.setDatabaseName("test");
     dbConnection.setUserName("root");
-    dbConnection.setPassword("nokia3310");
+    dbConnection.setPassword("");
     if(dbConnection.open()) {
         qDebug() << "Database connected!";
         QSqlQuery q(dbConnection);
@@ -223,7 +225,8 @@ QString queryOption::getLists() {
 // display all the task items inside the todo list that current user has in the list table
 // @param listNo the todo list that current user want to access into it
 // @return none
-QString queryOption::getTasks(QString listNo) {
+QString queryOption::getTasks() {
+    qDebug()<<"ingettask"<<getInputNo();
     QString s;
     QTextStream ss(&s);
     sqlQuery = "SELECT task.list_no, task.task_no, task.task_name, catalog.id "
@@ -232,7 +235,7 @@ QString queryOption::getTasks(QString listNo) {
         "ON catalog.list_no = task.list_no "
         "AND task.list_no = :listNo";
     qry.prepare(sqlQuery);
-    qry.bindValue(":listNo", listNo);
+    qry.bindValue(":listNo", getInputNo());
     if(qry.exec())
         qDebug() << "Displaying the task table...";
     else {
@@ -251,7 +254,7 @@ QString queryOption::getTasks(QString listNo) {
         "FROM catalog "
         "JOIN task "
         "ON catalog.list_no = task.list_no "
-        "AND task.list_no = " + listNo;
+        "AND task.list_no = " + getInputNo();
     return sqlQuery;
 }
 
@@ -378,4 +381,23 @@ void queryOption::setInputNo(QString inNum) {
 QString queryOption::getInputNo() {
     QString temp = inputNumber;
     return temp;
+}
+//* check if the user, email, or catalog name exist
+//* @param location
+//* @param option
+//* @return exist
+int queryOption::checkIfExist( QString option) {
+//    QSqlQuery query(db);
+    qry.exec("SELECT * FROM users`");
+    int exist = 0;
+     while (qry.next()) {
+         QString usernamedb = qry.value(2).toString();
+         QString emaildb = qry.value(0).toString();
+         if(option==usernamedb or option==emaildb){
+             exist -= 1;
+             return exist;
+         }else{
+         }
+     }
+    return exist;
 }

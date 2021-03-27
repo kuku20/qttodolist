@@ -26,8 +26,8 @@ void secondMain::userreturn(QString userReturn,QString userRID){
     ui->label_userdb->setText(userReturn);
     username=userReturn;
     userID=userRID;
-    queryOption queryOption;
-    queryOption.accessID(userID,username);
+//    queryOption queryOption;
+//    queryOption.accessID(userID,username);
 }
 
 secondMain::~secondMain()

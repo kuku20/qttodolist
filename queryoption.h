@@ -37,7 +37,7 @@ class queryOption
         void static accessID(QString user_id);
         static QString getID();
         QString getLists();
-        QString getTasks(QString listNo);
+        QString getTasks();
         void delTask(QString itemNo);
         void delList(QString listNo);
         void updateTask(QString newUpdate, QString itemNo);
@@ -46,6 +46,7 @@ class queryOption
         static QString getUser();
         void static setInputNo(QString inNum);
         static QString getInputNo();
+        int checkIfExist( QString option);
 };
 
 
