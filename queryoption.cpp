@@ -346,4 +346,36 @@ void queryOption::updateList(QString newUpdate, QString listNo) {
     }
 }
 
+/**
+ * @brief queryOption::accessUser store the current user in the variable
+ * @param user_name
+ */
+void queryOption::accessUser(QString user_name) {
+    currentUser = user_name;
+}
 
+/**
+ * @brief queryOption::getUser return current user name
+ * @return temp as the current user
+ */
+QString queryOption::getUser() {
+    QString temp = currentUser;
+    return temp;
+}
+
+/**
+ * @brief queryOption::setInputNo set the listNo or taskNo for action
+ * @param inNum user input either the listNo or taskNo
+ */
+void queryOption::setInputNo(QString inNum) {
+    inputNumber = inNum;
+}
+
+/**
+ * @brief queryOption::getInputNo get the inputnumber that user typed
+ * @return temp as inputNumber
+ */
+QString queryOption::getInputNo() {
+    QString temp = inputNumber;
+    return temp;
+}
