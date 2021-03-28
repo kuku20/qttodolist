@@ -67,7 +67,7 @@ void secondMain::on_searchBUT_clicked()
 {
     queryOption queryAct;
     QString key = ui->sLine->text();
-    QString sqlQuery = queryAct.searchTasks(key);
+    QString sqlQuery = queryAct.searchCata(key);
     QSqlQueryModel *smodel = new QSqlQueryModel();
     QSqlDatabase conn = QSqlDatabase::database();
     QSqlQuery qry(conn);
@@ -87,7 +87,7 @@ void secondMain::on_searchBUT_2_clicked()
 {
     queryOption queryAct;
     QString key = ui->sLine->text();
-    QString sqlQuery = queryAct.searchCata(key);
+    QString sqlQuery = queryAct.searchTasks(key);
     QSqlQueryModel *smodel = new QSqlQueryModel();
     QSqlDatabase conn = QSqlDatabase::database();
     QSqlQuery qry(conn);

@@ -403,19 +403,19 @@ int queryOption::checkIfExist(QString option, QString table) {
 // return the specific tasks lists
 // @param key: the input to search for specific tasks
 // @return none
-QString queryOption::searchTasks(QString keys){
+QString queryOption::searchCata(QString keys){
     //make query for search key from table
     sqlQuery = "SELECT *  "
                "FROM catalog "
-               "WHERE catalog.list_name = :key AND catalog.id = :id";
+               "WHERE catalog.list_name LIKE :key AND catalog.id = :id";
     qry.prepare(sqlQuery);
-    qry.bindValue(":key", keys);
+    qry.bindValue(":key", "%" + keys + "%");
     qry.bindValue(":id", getID());
     if(qry.exec()){
         qDebug() << "Display the Results";
     }
     else{
-        qDebug() << "ERROR: Failed to find any tasks";
+        qDebug() << "ERROR: Failed to find any cata";
         qDebug() << "ERROR: " << qry.lastError().text();
     }
     while (qry.next()) {
@@ -426,26 +426,26 @@ QString queryOption::searchTasks(QString keys){
     }
     sqlQuery = "SELECT *  "
                "FROM catalog "
-               "WHERE catalog.list_name = '" + keys +
-               "' AND catalog.id = " + getID();
+               "WHERE catalog.list_name LIKE '%" + keys +
+               "%' AND catalog.id = " + getID();
     return sqlQuery;
 }
 
-QString queryOption::searchCata(QString keys){
+QString queryOption::searchTasks(QString keys){
     //make query for search key from table
     sqlQuery = "SELECT catalog.id, task.* "
                "FROM catalog, task "
-               "WHERE task.task_name = :key "
+               "WHERE task.task_name LIKE :key "
                "AND catalog.id = :id "
                "AND catalog.list_no = task.task_no";
     qry.prepare(sqlQuery);
-    qry.bindValue(":key", keys);
+    qry.bindValue(":key", "%" + keys + "%");
     qry.bindValue(":id", getID());
     if(qry.exec()){
         qDebug() << "Display the Results";
     }
     else{
-        qDebug() << "ERROR: Failed to find any list in cata";
+        qDebug() << "ERROR: Failed to find any list in task";
         qDebug() << "ERROR: " << qry.lastError().text();
     }
     while (qry.next()) {
@@ -456,8 +456,8 @@ QString queryOption::searchCata(QString keys){
     }
     sqlQuery = "SELECT catalog.id, task.* "
                "FROM catalog, task "
-               "WHERE task.task_name = '" + keys +
-               "' AND catalog.id = " + getID() +
+               "WHERE task.task_name LIKE '%" + keys +
+               "%' AND catalog.id = " + getID() +
                " AND catalog.list_no = task.task_no";
     return sqlQuery;
 }
