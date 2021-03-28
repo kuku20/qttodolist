@@ -6,7 +6,6 @@
 QSqlDatabase queryOption::dbConnection;
 QString queryOption::sqlQuery;
 QString queryOption::currentID,queryOption::inputNumber,queryOption::currentUser;
-
 QSqlQuery queryOption::qry;
 
 /**
@@ -78,7 +77,6 @@ void queryOption::createCatalog() {
     createTaskTable();
 }
 
-
 // create task table for all the tasks inside todo lists
 // item_no is the primary key of this table
 // @param none
@@ -95,7 +93,6 @@ void queryOption::createTaskTable() {
 
 }
 
-
 // create a new todo list in catalog table
 // @param list_name the name of the todo list that input by user
 // @return none
@@ -107,7 +104,6 @@ void queryOption::newList(QString list_name, QString dateInsert) {
     qry.bindValue(":no", listNo);
     qry.bindValue(":name", list_name);
     qry.bindValue(":date", dateInsert);
-    qDebug() << "TEST: list name: " << list_name;
     if(qry.exec())
         qDebug() << "new to-do list created!";
     else {
@@ -115,7 +111,6 @@ void queryOption::newList(QString list_name, QString dateInsert) {
         qDebug() << "ERROR:" << qry.lastError().text();
     }
 }
-
 
 // create a new task in the task table
 // @param list_no the specific todo list user want to add task in it
@@ -226,15 +221,12 @@ QString queryOption::getLists() {
 // @param listNo the todo list that current user want to access into it
 // @return none
 QString queryOption::getTasks() {
-    qDebug()<<"ingettask"<<getInputNo();
-    qDebug()<<"ingettask id"<<getID();
-    QString s;
-    QTextStream ss(&s);
     sqlQuery = "SELECT task.list_no, task.task_no, task.task_name, catalog.id "
         "FROM catalog "
         "JOIN task "
         "ON catalog.list_no = task.list_no "
-        "AND task.list_no = :listNo";
+        "AND task.list_no = :listNo "
+        "AND catalog.id = :userID";
     qry.prepare(sqlQuery);
     qry.bindValue(":listNo", getInputNo());
     qry.bindValue(":userID", getID());
@@ -275,7 +267,6 @@ void queryOption::delTask(QString taskNo) {
     }
 }
 
-
 //delete the todo list including the task items inside the list
 //@param listNo the specific todo list number that current user want to delete
 //@return none
@@ -290,7 +281,7 @@ void queryOption::delList(QString listNo) {
         qDebug() << "ERROR: " << qry.lastError().text();
     }
     //delete the items
-    sqlQuery = "DELETE FROM list WHERE list_no = " + listNo;
+    sqlQuery = "DELETE FROM task WHERE list_no = " + listNo;
     qry.prepare(sqlQuery);
     if(qry.exec())
         qDebug() << "The list has been deleted from the catalog table";
@@ -357,7 +348,7 @@ void queryOption::updateList(QString newUpdate, QString listNo) {
  */
 void queryOption::accessUser(QString user_name) {
     currentUser = user_name;
-    qDebug()<<currentUser;
+    qDebug()<< "current user: " << currentUser;
 }
 
 /**
@@ -385,6 +376,7 @@ QString queryOption::getInputNo() {
     QString temp = inputNumber;
     return temp;
 }
+
 //* check if the user, email, or catalog name exist
 //* @param location
 //* @param option
@@ -398,9 +390,9 @@ int queryOption::checkIfExist( QString option,QString table) {
          QString usernamedb = qry.value(2).toString();
          QString emaildb = qry.value(0).toString();
          QString test = qry.value(1).toString();
-         if(option==usernamedb or
-                 sqlQuery.length()==19 and option==emaildb or
-                 sqlQuery.length()>25 and option==test){
+         if(option==usernamedb ||
+                 sqlQuery.length()==19 && option==emaildb or
+                 sqlQuery.length()>25 && option==test){
              exist -= 1;
              return exist;
          }
@@ -408,3 +400,26 @@ int queryOption::checkIfExist( QString option,QString table) {
     return exist;
 }
 
+// return the specific tasks lists
+// @param key: the input to search for specific tasks
+// @return none
+void queryOption::searchTasks(QString keys){
+    //make query for search key from table
+    sqlQuery = "SELECT task.list_no, task.task_no, task.task_name, catalog.id "
+                "FROM catalog AND task "
+                "WHERE task.task_name = " + keys + " OR catalog.list_name = " + keys;
+    qry.prepare(sqlQuery);
+    if(qry.exec()){
+        qDebug() << "Display the Results";
+    }
+    else{
+        qDebug() << "ERROR: Failed to find any tasks";
+        qDebug() << "ERROR: " << qry.lastError().text();
+    }
+    while (qry.next()) {
+        for(int i = 0; i < 4; i++){
+            qDebug() << qry.value(i).toString();
+        }
+         qDebug() << "";
+    }
+}

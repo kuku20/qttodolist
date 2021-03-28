@@ -1,9 +1,9 @@
 #include "thirdmain.h"
 #include "ui_thirdmain.h"
-#include"secondmain.h"
-#include"mainwindow.h"
-#include"task_dialog.h"
-#include<QMessageBox>
+#include "secondmain.h"
+#include "mainwindow.h"
+#include "task_dialog.h"
+#include <QMessageBox>
 #include <QInputDialog>
 #include <QDebug>
 #include "queryoption.h"
@@ -55,31 +55,29 @@ void thirdmain::on_pushButton_2_clicked()
     QString inNum = QInputDialog::getText(this, tr("Which catalog???: "),
                                             tr("Input the list_no:"), QLineEdit::Normal,
                                             tr(""), &ok);
-       if (ok && !inNum.isEmpty()){
+       if (ok && !inNum.isEmpty()) {
            qDebug() << inNum;
        }
-       else{
+       else {
            qDebug() << inNum;
            return ;
        }
     queryOption queryOption;
     //seach if list_no in the user
-    QString scan= "catalog WHERE id ="+queryOption.getID();
-    qDebug()<<"oday"<<scan;
-    int exist=0;
-     exist=queryOption.checkIfExist(inNum,scan);
-     qDebug()<<"oday"<<exist;
-    if(exist<0){
+    QString scan= "catalog WHERE id =" + queryOption.getID();
+    qDebug() << "oday" << scan;
+    int exist = 0;
+    exist = queryOption.checkIfExist(inNum,scan);
+    qDebug() << "oday" << exist;
+    if(exist<0) {
         queryOption.setInputNo(inNum);
         task_dialog task_dialog;
         task_dialog.setModal(true);
         task_dialog.exec();
     }
-    else{
-        QMessageBox::information(this, "Warning",
-                                 "You don't have this list_no");
+    else {
+        QMessageBox::information(this, "Warning", "You don't have this list_no");
     }
-
 }
 
 void thirdmain::on_pushButton_clicked()
@@ -89,19 +87,19 @@ void thirdmain::on_pushButton_clicked()
     QString catalogI = QInputDialog::getText(this, tr("Which catalog???: "),
                                             tr("Input the list_no:"), QLineEdit::Normal,
                                             tr(""), &ok);
-       if (ok && !catalogI.isEmpty()){
-           qDebug() << catalogI;
-           queryOption queryOption;
-           queryOption.delList(catalogI);
-           close();
-           thirdmain thirdmain;
-           thirdmain.setModal(true);
-           thirdmain.exec();
-       }
-       else{
-           qDebug() << catalogI;
-           return ;
-       }
+    if (ok && !catalogI.isEmpty()){
+        qDebug() << catalogI;
+        queryOption queryOption;
+        queryOption.delList(catalogI);
+        close();
+        thirdmain thirdmain;
+        thirdmain.setModal(true);
+        thirdmain.exec();
+    }
+    else {
+        qDebug() << catalogI;
+        return ;
+    }
 }
 
 void thirdmain::on_pushButton_5_clicked()
@@ -112,26 +110,25 @@ void thirdmain::on_pushButton_5_clicked()
     QString list_no = QInputDialog::getText(this, tr("Which catalog???: "),
                                             tr("Input the list_no:"), QLineEdit::Normal,
                                             tr(""), &ok);
-       if (ok && !list_no.isEmpty()){
-
-           QString newUpdate = QInputDialog::getText(this, tr("Which catalog???: "),
+    if (ok && !list_no.isEmpty()){
+        QString newUpdate = QInputDialog::getText(this, tr("Which catalog???: "),
                                                    tr("Input the new list_name :"), QLineEdit::Normal,
                                                    tr(""), &ok);
-           if (ok && !newUpdate.isEmpty()){
-               queryOption queryOption;
-               queryOption.updateList(newUpdate, list_no);
-               close();
-               thirdmain thirdmain;
-               thirdmain.setModal(true);
-               thirdmain.exec();
-           }
-           else{
-               return ;
-           }
-       }
-       else{
-           return ;
-       }
+        if (ok && !newUpdate.isEmpty()){
+            queryOption queryOption;
+            queryOption.updateList(newUpdate, list_no);
+            close();
+            thirdmain thirdmain;
+            thirdmain.setModal(true);
+            thirdmain.exec();
+        }
+        else {
+            return ;
+        }
+    }
+    else {
+        return ;
+    }
 }
 //go back to user option
 void thirdmain::on_pushButton_3_clicked()

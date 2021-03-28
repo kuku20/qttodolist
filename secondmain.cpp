@@ -10,19 +10,22 @@
 
 QString username;
 QString userID;
+QStandardItemModel *smodel;
+bool searchActive = false;
 
 secondMain::secondMain(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::secondMain)
 {
-
     ui->setupUi(this);
+    smodel = new QStandardItemModel(1,4,this);
 //    queryOption queryOption;
 //    username=queryOption.getID();
     ui->label_userdb->setText(username);
 //    this->setWindowTitle("USER Catalog");
     this->setWindowTitle("secondmain");
 }
+
 void secondMain::userreturn(QString userReturn,QString userRID){
     ui->label_userdb->setText(userReturn);
     username=userReturn;
@@ -35,13 +38,13 @@ secondMain::~secondMain()
 {
     delete ui;
 }
+
 //create new todo list
 void secondMain::on_pushButton_clicked()
 {
     create_todolist_dialog create_todolist_dialog;
     create_todolist_dialog.setModal(true);
     create_todolist_dialog.exec();
-
 }
 
 void secondMain::on_pushButton_2_clicked()
@@ -53,7 +56,6 @@ void secondMain::on_pushButton_2_clicked()
     thirdmain thirdmain;
     thirdmain.setModal(true);
     thirdmain.exec();
-
 }
 
 //logout

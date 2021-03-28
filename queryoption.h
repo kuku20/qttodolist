@@ -1,6 +1,6 @@
-
 #ifndef QUERYOPTION_H
 #define QUERYOPTION_H
+
 #include<QtSql>
 #include <QSqlQuery>
 #include <QSqlDatabase>
@@ -31,25 +31,24 @@ class queryOption
         void static createCatalog();
         void static createTaskTable();
         void newList(QString list_name, QString dateInsert);
-        void newTask( QString item_name);
+        void newTask( QString task_name);
         QString genListNo();
         QString genTaskNo();
         void static accessID(QString user_id);
         static QString getID();
         QString getLists();
         QString getTasks();
-        void delTask(QString itemNo);
+        void delTask(QString taskNo);
         void delList(QString listNo);
-        void updateTask(QString newUpdate, QString itemNo);
+        void updateTask(QString newUpdate, QString taskNo);
         void updateList(QString newUpdate, QString listNo);
         void static accessUser(QString user_name);
         static QString getUser();
         void static setInputNo(QString inNum);
         static QString getInputNo();
-        int checkIfExist( QString option,QString table);
+        int checkIfExist(QString option, QString table);
+        void searchTasks(QString keys);
 };
-
-
 
 #endif // QUERYOPTION_H
 

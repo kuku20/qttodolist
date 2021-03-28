@@ -23,8 +23,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-
 void MainWindow::on_pushButton_clicked()
 {
     QString username = ui->lineEdit_userInput->text();

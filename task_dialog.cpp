@@ -1,8 +1,10 @@
 #include "task_dialog.h"
 #include "ui_task_dialog.h"
-#include"queryoption.h"
+#include "queryoption.h"
 #include <QInputDialog>
+
 bool ok;
+
 task_dialog::task_dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::task_dialog)
@@ -13,10 +15,10 @@ task_dialog::task_dialog(QWidget *parent) :
     QSqlDatabase db = QSqlDatabase::database();
     QSqlQuery q(db);
 
-    QString s=queryOption.getTasks();
-    if(s==""){
+    QString s = queryOption.getTasks();
+    if(s == "")
         return;
-    }else{
+    else {
     //get data
     q.prepare(s);
     q.exec();
@@ -88,7 +90,6 @@ void task_dialog::on_pushButton_3_clicked()
 {
     //choice task_no to change name
     //queryOption::updateTask(QString newUpdate, QString taskNo)
-
     QString taskNo = QInputDialog::getText(this, tr("Task_no to update???: "),
                                             tr("Input Task_no to update:"), QLineEdit::Normal,
                                             tr(""), &ok);
@@ -96,9 +97,7 @@ void task_dialog::on_pushButton_3_clicked()
        QString newUpdate = QInputDialog::getText(this, tr("???: "),
                                                tr("Input new taskName:"), QLineEdit::Normal,
                                                tr(""), &ok);
-
        if (ok && !newUpdate.isEmpty()){
-
            queryOption queryOption;
            queryOption.updateTask(newUpdate, taskNo);
            close();
@@ -111,7 +110,6 @@ void task_dialog::on_pushButton_3_clicked()
    }
    else
        return ;
-
 }
 
 void task_dialog::on_pushButton_4_clicked()
