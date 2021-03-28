@@ -1,6 +1,6 @@
 #include "secondmain.h"
 #include "ui_secondmain.h"
-#include<QMessageBox>
+#include <QMessageBox>
 #include <QInputDialog>
 #include <QDebug>
 #include "thirdmain.h"
@@ -10,15 +10,11 @@
 
 QString username;
 QString userID;
-QStandardItemModel *smodel;
-bool searchActive = false;
-
 secondMain::secondMain(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::secondMain)
 {
     ui->setupUi(this);
-    smodel = new QStandardItemModel(1,4,this);
 //    queryOption queryOption;
 //    username=queryOption.getID();
     ui->label_userdb->setText(username);
@@ -66,3 +62,43 @@ void secondMain::on_pushButton_3_clicked()
     newmain->show();
 }
 
+
+void secondMain::on_searchBUT_clicked()
+{
+    queryOption queryAct;
+    QString key = ui->sLine->text();
+    QString sqlQuery = queryAct.searchTasks(key);
+    QSqlQueryModel *smodel = new QSqlQueryModel();
+    QSqlDatabase conn = QSqlDatabase::database();
+    QSqlQuery qry(conn);
+    qry.prepare(sqlQuery);
+    if(qry.exec()){
+        qDebug() << "Searching...";
+    }
+    else{
+        qDebug() << "ERROR: Failed to find any results";
+        qDebug() << "ERROR: " << qry.lastError().text();
+    }
+    smodel->setQuery(qry);
+    ui->searchView->setModel(smodel);
+}
+
+void secondMain::on_searchBUT_2_clicked()
+{
+    queryOption queryAct;
+    QString key = ui->sLine->text();
+    QString sqlQuery = queryAct.searchCata(key);
+    QSqlQueryModel *smodel = new QSqlQueryModel();
+    QSqlDatabase conn = QSqlDatabase::database();
+    QSqlQuery qry(conn);
+    qry.prepare(sqlQuery);
+    if(qry.exec()){
+        qDebug() << "Searching...";
+    }
+    else{
+        qDebug() << "ERROR: Failed to find any results";
+        qDebug() << "ERROR: " << qry.lastError().text();
+    }
+    smodel->setQuery(qry);
+    ui->searchView->setModel(smodel);
+}

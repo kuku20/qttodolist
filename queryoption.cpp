@@ -381,8 +381,8 @@ QString queryOption::getInputNo() {
 //* @param location
 //* @param option
 //* @return exist
-int queryOption::checkIfExist( QString option,QString table) {
-    sqlQuery="SELECT * FROM " +table;
+int queryOption::checkIfExist(QString option, QString table) {
+    sqlQuery="SELECT * FROM " + table;
     qry.prepare(sqlQuery);
     qry.exec();
     int exist = 0;
@@ -391,7 +391,7 @@ int queryOption::checkIfExist( QString option,QString table) {
          QString emaildb = qry.value(0).toString();
          QString test = qry.value(1).toString();
          if(option==usernamedb ||
-                 sqlQuery.length()==19 && option==emaildb or
+                 sqlQuery.length()==19 && option==emaildb ||
                  sqlQuery.length()>25 && option==test){
              exist -= 1;
              return exist;
@@ -403,12 +403,14 @@ int queryOption::checkIfExist( QString option,QString table) {
 // return the specific tasks lists
 // @param key: the input to search for specific tasks
 // @return none
-void queryOption::searchTasks(QString keys){
+QString queryOption::searchTasks(QString keys){
     //make query for search key from table
-    sqlQuery = "SELECT task.list_no, task.task_no, task.task_name, catalog.id "
-                "FROM catalog AND task "
-                "WHERE task.task_name = " + keys + " OR catalog.list_name = " + keys;
+    sqlQuery = "SELECT *  "
+               "FROM catalog "
+               "WHERE catalog.list_name = :key AND catalog.id = :id";
     qry.prepare(sqlQuery);
+    qry.bindValue(":key", keys);
+    qry.bindValue(":id", getID());
     if(qry.exec()){
         qDebug() << "Display the Results";
     }
@@ -422,4 +424,43 @@ void queryOption::searchTasks(QString keys){
         }
          qDebug() << "";
     }
+    sqlQuery = "SELECT *  "
+               "FROM catalog "
+               "WHERE catalog.list_name = '" + keys +
+               "' AND catalog.id = " + getID();
+    return sqlQuery;
 }
+
+QString queryOption::searchCata(QString keys){
+    //make query for search key from table
+    sqlQuery = "SELECT catalog.id, task.* "
+               "FROM catalog, task "
+               "WHERE task.task_name = :key "
+               "AND catalog.id = :id "
+               "AND catalog.list_no = task.task_no";
+    qry.prepare(sqlQuery);
+    qry.bindValue(":key", keys);
+    qry.bindValue(":id", getID());
+    if(qry.exec()){
+        qDebug() << "Display the Results";
+    }
+    else{
+        qDebug() << "ERROR: Failed to find any list in cata";
+        qDebug() << "ERROR: " << qry.lastError().text();
+    }
+    while (qry.next()) {
+        for(int i = 0; i < 4; i++){
+            qDebug() << qry.value(i).toString();
+        }
+         qDebug() << "";
+    }
+    sqlQuery = "SELECT catalog.id, task.* "
+               "FROM catalog, task "
+               "WHERE task.task_name = '" + keys +
+               "' AND catalog.id = " + getID() +
+               " AND catalog.list_no = task.task_no";
+    return sqlQuery;
+}
+
+
+

@@ -47,7 +47,8 @@ class queryOption
         void static setInputNo(QString inNum);
         static QString getInputNo();
         int checkIfExist(QString option, QString table);
-        void searchTasks(QString keys);
+        QString searchTasks(QString keys);
+        QString searchCata(QString keys);
 };
 
 #endif // QUERYOPTION_H
