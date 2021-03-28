@@ -25,8 +25,8 @@ void createNewAcount::on_pushButton_clicked()
     QString new_pass = ui->lineEdit_Npass->text();
     QString new_email = ui->lineEdit_Nemail->text();
     queryOption queryOption;
-    exist_u=queryOption.checkIfExist(new_user);
-    exist_e=queryOption.checkIfExist(new_email);
+    exist_u=queryOption.checkIfExist(new_user,"users");
+    exist_e=queryOption.checkIfExist(new_email,"users");
 
     if(exist_u<0 or exist_e <0){
         if(exist_u<0){

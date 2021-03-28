@@ -46,7 +46,7 @@ class queryOption
         static QString getUser();
         void static setInputNo(QString inNum);
         static QString getInputNo();
-        int checkIfExist( QString option);
+        int checkIfExist( QString option,QString table);
 };
 
 

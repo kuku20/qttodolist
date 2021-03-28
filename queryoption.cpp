@@ -227,6 +227,7 @@ QString queryOption::getLists() {
 // @return none
 QString queryOption::getTasks() {
     qDebug()<<"ingettask"<<getInputNo();
+    qDebug()<<"ingettask id"<<getID();
     QString s;
     QTextStream ss(&s);
     sqlQuery = "SELECT task.list_no, task.task_no, task.task_name, catalog.id "
@@ -234,10 +235,9 @@ QString queryOption::getTasks() {
         "JOIN task "
         "ON catalog.list_no = task.list_no "
         "AND task.list_no = :listNo";
-//        "AND catalog.id = :userID";
     qry.prepare(sqlQuery);
     qry.bindValue(":listNo", getInputNo());
-//    qry.bindValue(":userID", getID());
+    qry.bindValue(":userID", getID());
     if(qry.exec())
         qDebug() << "Displaying the task table...";
     else {
@@ -257,7 +257,6 @@ QString queryOption::getTasks() {
         "JOIN task "
         "ON catalog.list_no = task.list_no "
         "AND task.list_no = " + getInputNo();
-//            + "AND catalog.id = " + getID();
     return sqlQuery;
 }
 
@@ -358,6 +357,7 @@ void queryOption::updateList(QString newUpdate, QString listNo) {
  */
 void queryOption::accessUser(QString user_name) {
     currentUser = user_name;
+    qDebug()<<currentUser;
 }
 
 /**
@@ -389,18 +389,22 @@ QString queryOption::getInputNo() {
 //* @param location
 //* @param option
 //* @return exist
-int queryOption::checkIfExist( QString option) {
-//    QSqlQuery query(db);
-    qry.exec("SELECT * FROM users`");
+int queryOption::checkIfExist( QString option,QString table) {
+    sqlQuery="SELECT * FROM " +table;
+    qry.prepare(sqlQuery);
+    qry.exec();
     int exist = 0;
      while (qry.next()) {
          QString usernamedb = qry.value(2).toString();
          QString emaildb = qry.value(0).toString();
-         if(option==usernamedb or option==emaildb){
+         QString test = qry.value(1).toString();
+         if(option==usernamedb or
+                 sqlQuery.length()==19 and option==emaildb or
+                 sqlQuery.length()>25 and option==test){
              exist -= 1;
              return exist;
-         }else{
          }
      }
     return exist;
 }
+

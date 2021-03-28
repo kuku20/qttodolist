@@ -23,18 +23,11 @@ private slots:
 
     void on_pushButton_2_clicked();
 
-
-
     void on_pushButton_3_clicked();
-
-
-
-    void on_label_3_linkActivated(const QString &link);
 
 private:
     Ui::secondMain *ui;
 
-//    tasklist *Tasklist;
 };
 
 #endif // SECONDMAIN_H

@@ -12,17 +12,18 @@ thirdmain::thirdmain(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::thirdmain)
 {
-    qDebug()<<"";
     ui->setupUi(this);
     this->setWindowTitle("USER datalog_list__thirdmain.cpp");
     queryOption queryOption;
     QSqlDatabase db = QSqlDatabase::database();
     QSqlQuery q(db);
-//    ui->label->setText(queryOption.getUsername().toUpper()+"'s Catalogs : ");
-
+    qDebug()<<"ki"<<queryOption.getUser().toUpper();
+    ui->label->setText(queryOption.getUser().toUpper()+"'s Catalogs : ");
+    //get data
     QString s=queryOption.getLists();
     q.prepare(s);
     q.exec();
+    //create table and display
     model = new QStandardItemModel(q.size(),3,this);
     ui->tableView->setModel(model);
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("list_no"));
@@ -35,11 +36,8 @@ thirdmain::thirdmain(QWidget *parent) :
         {
             QModelIndex index
                     = model->index(row,col,QModelIndex());
-            // 0 for all data
-
                 model->setData(index,q.value(col).toString());
             }
-
         }
         row++;
     }
@@ -50,35 +48,38 @@ thirdmain::~thirdmain()
     delete ui;
 }
 
-void thirdmain::on_pushButton_3_clicked()
-{
-    close();
-    secondMain secondMain;
-    secondMain.setModal(true);
-    secondMain.exec();
-}
-
-
-
 void thirdmain::on_pushButton_2_clicked()
 {
-    //display the specfic catalog
+    //display the specfic catalog(LIST_NO)
     bool ok;
-    QString catalogI = QInputDialog::getText(this, tr("Which catalog???: "),
+    QString inNum = QInputDialog::getText(this, tr("Which catalog???: "),
                                             tr("Input the list_no:"), QLineEdit::Normal,
-                                            tr("input the list_no"), &ok);
-       if (ok && !catalogI.isEmpty()){
-           qDebug() << catalogI;
+                                            tr(""), &ok);
+       if (ok && !inNum.isEmpty()){
+           qDebug() << inNum;
        }
        else{
-           qDebug() << catalogI;
+           qDebug() << inNum;
            return ;
        }
     queryOption queryOption;
-    queryOption.setInputNo(catalogI);
-    task_dialog task_dialog;
-    task_dialog.setModal(true);
-    task_dialog.exec();
+    //seach if list_no in the user
+    QString scan= "catalog WHERE id ="+queryOption.getID();
+    qDebug()<<"oday"<<scan;
+    int exist=0;
+     exist=queryOption.checkIfExist(inNum,scan);
+     qDebug()<<"oday"<<exist;
+    if(exist<0){
+        queryOption.setInputNo(inNum);
+        task_dialog task_dialog;
+        task_dialog.setModal(true);
+        task_dialog.exec();
+    }
+    else{
+        QMessageBox::information(this, "Warning",
+                                 "You don't have this list_no");
+    }
+
 }
 
 void thirdmain::on_pushButton_clicked()
@@ -106,7 +107,7 @@ void thirdmain::on_pushButton_clicked()
 void thirdmain::on_pushButton_5_clicked()
 {
     //change catalog name
-//    queryOption::updateList(QString newUpdate, QString listNo)
+    // queryOption::updateList(QString newUpdate, QString listNo)
     bool ok;
     QString list_no = QInputDialog::getText(this, tr("Which catalog???: "),
                                             tr("Input the list_no:"), QLineEdit::Normal,
@@ -131,4 +132,12 @@ void thirdmain::on_pushButton_5_clicked()
        else{
            return ;
        }
+}
+//go back to user option
+void thirdmain::on_pushButton_3_clicked()
+{
+    close();
+    secondMain secondMain;
+    secondMain.setModal(true);
+    secondMain.exec();
 }

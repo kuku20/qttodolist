@@ -2,6 +2,7 @@
 #include "ui_create_todolist_dialog.h"
 #include <QDebug>
 #include "queryoption.h"
+#include <QInputDialog>
 
 create_todolist_dialog::create_todolist_dialog(QWidget *parent) :
     QDialog(parent),
@@ -24,13 +25,50 @@ QString create_todolist_dialog::getdate(){
 }
 void create_todolist_dialog::on_pushButton_clicked()
 {
+    int exist_u = 0;
     QString list_name = ui->lineEdit->text();
 //    qDebug()<<getdate();
     queryOption queryOption;
-    queryOption.newList(list_name, getdate());
-    QMessageBox::warning(this,"Create catalog",
-                         "the " +list_name+" created.");
-    close();
+    exist_u=queryOption.checkIfExist(list_name,"catalog");
+    if(exist_u<0 or list_name=="" or getdate()==""){
+        QMessageBox::warning(this, "Warning",
+                                 "This  catalog already exist!!!");
+        }
+    else
+    {
+        queryOption.newList(list_name, getdate());
+        QMessageBox::information(this,"Create catalog",
+                             "the " +list_name+" created.");
+//        QMessageBox::StandardButton reply;
+//        while(reply != QMessageBox::No){
+//            reply = QMessageBox::question(this, "Add Task", "Do you want to add task"
+//                                                            "to this ?",
+//                                           QMessageBox::Yes|QMessageBox::No);
+//             if (reply == QMessageBox::Yes) {
+//               qDebug() << "Yes was clicked";
+//               //add task
+//               bool ok;
+//               QString catalogI = QInputDialog::getText(this, tr("Which catalog???: "),
+//                                                       tr("Input taskName:"), QLineEdit::Normal,
+//                                                       tr(""), &ok);
+//                  if (ok && !catalogI.isEmpty()){
+//                      qDebug() << catalogI;
+//                      queryOption.newTask(catalogI);
+//                      close();
+//                  }
+//                  else{
+//                      qDebug() << catalogI;
+//                      return ;
+//                  }
+//    //           QApplication::quit();
+//             } else {
+//               qDebug() << "Yes was *not* clicked";
+//             }
+
+//        }
+        close();
+
+    }
 
 
 }

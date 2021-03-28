@@ -13,20 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle("Wellcom to TO_DO_LIST");
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-     db.setHostName("127.0.0.1");
-     db.setDatabaseName("test");
-     db.setUserName("root");
-     db.setPassword("");
-     if(db.open()){
-         ui->label->setText("connected:");
-     }
-     else{
-          ui->label->setText("NOT connected:");
-     }
-       QSqlQuery query(db);
         queryOption queryOption;
-        queryOption::setCon(db);
+        queryOption::setCon();
        queryOption.createUser();
 }
 
@@ -43,9 +31,7 @@ void MainWindow::on_pushButton_clicked()
     QString password = ui->lineEdit_passInput->text();
     QSqlDatabase db = QSqlDatabase::database();
     QSqlQuery query(db);
-     bool userlogined=false;
-     QString q="SELECT * FROM users WHERE users username = "+username;
-     qDebug()<<q;
+    bool userlogined=false;
     query.exec("SELECT * FROM users");
     while (query.next()) {
             QString usernamedb = query.value(2).toString();
@@ -56,7 +42,9 @@ void MainWindow::on_pushButton_clicked()
                 close();
                 secondMain secondMain;
                 secondMain.userreturn(username,query.value(3).toString());
+
                 queryOption::accessID(query.value(3).toString());
+                queryOption::accessUser(username);
                 queryOption::setCon(db);
                 secondMain.setModal(true);
                 secondMain.exec();
