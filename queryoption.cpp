@@ -121,11 +121,11 @@ void queryOption::newList(QString list_name, QString dateInsert) {
 // @param list_no the specific todo list user want to add task in it
 // @param task_name the name of the task input by user
 // @return none
-void queryOption::newTask(QString list_no, QString task_name) {
+void queryOption::newTask(QString task_name) {
     QString taskNo = genTaskNo();
     sqlQuery = "INSERT INTO Task VALUES(:listNo, :taskNo, :name)";
     qry.prepare(sqlQuery);
-    qry.bindValue(":listNo", list_no);
+    qry.bindValue(":listNo", getInputNo());
     qry.bindValue(":taskNo", taskNo);
     qry.bindValue(":name", task_name);
     if(qry.exec())
@@ -234,8 +234,10 @@ QString queryOption::getTasks() {
         "JOIN task "
         "ON catalog.list_no = task.list_no "
         "AND task.list_no = :listNo";
+//        "AND catalog.id = :userID";
     qry.prepare(sqlQuery);
     qry.bindValue(":listNo", getInputNo());
+//    qry.bindValue(":userID", getID());
     if(qry.exec())
         qDebug() << "Displaying the task table...";
     else {
@@ -255,6 +257,7 @@ QString queryOption::getTasks() {
         "JOIN task "
         "ON catalog.list_no = task.list_no "
         "AND task.list_no = " + getInputNo();
+//            + "AND catalog.id = " + getID();
     return sqlQuery;
 }
 
@@ -320,7 +323,7 @@ void queryOption::delList(QString listNo) {
 // @param itemNo the target task item number that needs to update
 // @return none
 void queryOption::updateTask(QString newUpdate, QString taskNo) {
-    sqlQuery =	"UPDATE list SET item_name = :update WHERE item_no = :num";
+    sqlQuery =	"UPDATE task SET task_name = :update WHERE task_no = :num";
     qry.prepare(sqlQuery);
     qry.bindValue(":update", newUpdate);
     qry.bindValue(":num", taskNo);

@@ -6,6 +6,7 @@
 #include "thirdmain.h"
 #include "mainwindow.h"
 #include <QTextStream>
+#include "create_todolist_dialog.h"
 
 QString username;
 QString userID;
@@ -37,18 +38,20 @@ secondMain::~secondMain()
 //create new todo list
 void secondMain::on_pushButton_clicked()
 {
-    bool ok;
+//    bool ok;
 
-        qDebug()<<"in 1 click"<<username;
-        qDebug()<<"username Id:"<<userID;
-       QString catalogI = QInputDialog::getText(this, tr("Wellcome to create new datalog: "),
-                                               tr("Input the catalog name:"), QLineEdit::Normal,
-                                               tr("none"), &ok);
-          if (ok && !catalogI.isEmpty()){
-              qDebug() << catalogI;
-          }
+//        qDebug()<<"in 1 click"<<username;
+//        qDebug()<<"username Id:"<<userID;
+//       QString catalogI = QInputDialog::getText(this, tr("Wellcome to create new datalog: "),
+//                                               tr("Input the catalog name:"), QLineEdit::Normal,
+//                                               tr("none"), &ok);
+//          if (ok && !catalogI.isEmpty()){
+//              qDebug() << catalogI;
+//          }
        //add list to the this catalog or
-
+    create_todolist_dialog create_todolist_dialog;
+    create_todolist_dialog.setModal(true);
+    create_todolist_dialog.exec();
 
 }
 

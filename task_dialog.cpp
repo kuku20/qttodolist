@@ -1,18 +1,23 @@
 #include "task_dialog.h"
 #include "ui_task_dialog.h"
 #include"queryoption.h"
+#include <QInputDialog>
 
 task_dialog::task_dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::task_dialog)
 {
     ui->setupUi(this);
-     this->setWindowTitle("USER task list__task_dialog.cpp");
+    this->setWindowTitle("USER task list__task_dialog.cpp");
     queryOption queryOption;
     QSqlDatabase db = QSqlDatabase::database();
     QSqlQuery q(db);
 
     QString s=queryOption.getTasks();
+    if(s==""){
+        return;
+    }else{
+
     q.prepare(s);
     q.exec();
     model = new QStandardItemModel(q.size(),3,this);
@@ -36,6 +41,7 @@ task_dialog::task_dialog(QWidget *parent) :
         }
         row++;
     }
+    }
 }
 
 task_dialog::~task_dialog()
@@ -46,16 +52,78 @@ task_dialog::~task_dialog()
 void task_dialog::on_pushButton_clicked()
 {
     //add more task to the specific catalog
+    bool ok;
+    QString catalogI = QInputDialog::getText(this, tr("Which catalog???: "),
+                                            tr("Input taskName:"), QLineEdit::Normal,
+                                            tr(""), &ok);
+       if (ok && !catalogI.isEmpty()){
+           qDebug() << catalogI;
+           queryOption queryOption;
+           queryOption.newTask(catalogI);
+           close();
+           task_dialog task_dialog;
+           task_dialog.setModal(true);
+           task_dialog.exec();
+       }
+       else{
+           qDebug() << catalogI;
+           return ;
+       }
+
 }
 
 void task_dialog::on_pushButton_2_clicked()
 {
     //choice task_no to delete
+    //queryOption::delTask(QString taskNo)
+    bool ok;
+    QString taskNo = QInputDialog::getText(this, tr("Which catalog???: "),
+                                            tr("Input taskName:"), QLineEdit::Normal,
+                                            tr(""), &ok);
+       if (ok && !taskNo.isEmpty()){
+           queryOption queryOption;
+           queryOption.delTask(taskNo);
+           close();
+           task_dialog task_dialog;
+           task_dialog.setModal(true);
+           task_dialog.exec();
+       }
+       else{
+           return ;
+       }
+
 }
 
 void task_dialog::on_pushButton_3_clicked()
 {
     //choice task_no to change name
+    //queryOption::updateTask(QString newUpdate, QString taskNo)
+    bool ok;
+    QString taskNo = QInputDialog::getText(this, tr("Task_no to update???: "),
+                                            tr("Input Task_no to update:"), QLineEdit::Normal,
+                                            tr(""), &ok);
+       if (ok && !taskNo.isEmpty()){
+
+           QString newUpdate = QInputDialog::getText(this, tr("???: "),
+                                                   tr("Input new taskName:"), QLineEdit::Normal,
+                                                   tr(""), &ok);
+
+           if (ok && !newUpdate.isEmpty()){
+
+               queryOption queryOption;
+               queryOption.updateTask(newUpdate, taskNo);
+               close();
+               task_dialog task_dialog;
+               task_dialog.setModal(true);
+               task_dialog.exec();
+           }
+           else{
+               return ;
+           }
+       }
+       else{
+           return ;
+       }
 }
 
 void task_dialog::on_pushButton_4_clicked()

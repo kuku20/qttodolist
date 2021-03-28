@@ -102,3 +102,33 @@ void thirdmain::on_pushButton_clicked()
            return ;
        }
 }
+
+void thirdmain::on_pushButton_5_clicked()
+{
+    //change catalog name
+//    queryOption::updateList(QString newUpdate, QString listNo)
+    bool ok;
+    QString list_no = QInputDialog::getText(this, tr("Which catalog???: "),
+                                            tr("Input the list_no:"), QLineEdit::Normal,
+                                            tr(""), &ok);
+       if (ok && !list_no.isEmpty()){
+
+           QString newUpdate = QInputDialog::getText(this, tr("Which catalog???: "),
+                                                   tr("Input the new list_name :"), QLineEdit::Normal,
+                                                   tr(""), &ok);
+           if (ok && !newUpdate.isEmpty()){
+               queryOption queryOption;
+               queryOption.updateList(newUpdate, list_no);
+               close();
+               thirdmain thirdmain;
+               thirdmain.setModal(true);
+               thirdmain.exec();
+           }
+           else{
+               return ;
+           }
+       }
+       else{
+           return ;
+       }
+}

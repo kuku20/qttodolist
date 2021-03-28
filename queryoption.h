@@ -31,7 +31,7 @@ class queryOption
         void static createCatalog();
         void static createTaskTable();
         void newList(QString list_name, QString dateInsert);
-        void newTask(QString list_no, QString item_name);
+        void newTask( QString item_name);
         QString genListNo();
         QString genTaskNo();
         void static accessID(QString user_id);

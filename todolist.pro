@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    create_todolist_dialog.cpp \
     createnewacount.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
     thirdmain.cpp
 
 HEADERS += \
+    create_todolist_dialog.h \
     createnewacount.h \
     mainwindow.h \
     queryoption.h \
@@ -26,6 +28,7 @@ HEADERS += \
     thirdmain.h
 
 FORMS += \
+    create_todolist_dialog.ui \
     createnewacount.ui \
     mainwindow.ui \
     secondmain.ui \
