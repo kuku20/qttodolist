@@ -84,7 +84,7 @@ void queryOption::createCatalog() {
 void queryOption::createTaskTable() {
     sqlQuery =	"CREATE TABLE IF NOT EXISTS Task ("
                 "list_no INT NOT NULL, task_no INT NOT NULL, task_name VARCHAR(50) NOT NULL,"
-                "PRIMARY KEY(task_no));";
+                "status VARCHAR(3) NOT NULL, PRIMARY KEY(task_no));";
     qry.prepare(sqlQuery);
     if(qry.exec())
         qDebug() << "Task table created!";
@@ -118,11 +118,12 @@ void queryOption::newList(QString list_name, QString dateInsert) {
 // @return none
 void queryOption::newTask(QString task_name) {
     QString taskNo = genTaskNo();
-    sqlQuery = "INSERT INTO Task VALUES(:listNo, :taskNo, :name)";
+    sqlQuery = "INSERT INTO Task VALUES(:listNo, :taskNo, :name, :stat)";
     qry.prepare(sqlQuery);
     qry.bindValue(":listNo", getInputNo());
     qry.bindValue(":taskNo", taskNo);
     qry.bindValue(":name", task_name);
+    qry.bindValue(":stat", "NO");
     if(qry.exec())
         qDebug() << "new task created!";
     else {
@@ -221,7 +222,7 @@ QString queryOption::getLists() {
 // @param listNo the todo list that current user want to access into it
 // @return none
 QString queryOption::getTasks() {
-    sqlQuery = "SELECT task.list_no, task.task_no, task.task_name, catalog.id "
+    sqlQuery = "SELECT task.list_no, task.task_no, task.task_name, task.status, catalog.id "
         "FROM catalog "
         "JOIN task "
         "ON catalog.list_no = task.list_no "
@@ -239,12 +240,12 @@ QString queryOption::getTasks() {
     }
     qDebug() << "list_no\ntask_no\ntask_name\nuser_id";
     while (qry.next()) {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             qDebug() <<  qry.value(i).toString();
         }
         qDebug() << "";
     }
-    sqlQuery = "SELECT task.list_no, task.task_no, task.task_name, catalog.id "
+    sqlQuery = "SELECT task.list_no, task.task_no, task.task_name, task.status, catalog.id "
         "FROM catalog "
         "JOIN task "
         "ON catalog.list_no = task.list_no "
@@ -424,16 +425,18 @@ QString queryOption::searchCata(QString keys){
         }
          qDebug() << "";
     }
+    qDebug() << "first query sent: " << sqlQuery;
     sqlQuery = "SELECT *  "
                "FROM catalog "
                "WHERE catalog.list_name LIKE '%" + keys +
                "%' AND catalog.id = " + getID();
+    qDebug() << "second query sent: " << sqlQuery;
     return sqlQuery;
 }
 
 QString queryOption::searchTasks(QString keys){
     //make query for search key from table
-    sqlQuery = "SELECT catalog.id, task.* "
+    sqlQuery = "SELECT catalog.id, task.list_no, task.task_no, task.task_name, task.status "
                "FROM catalog, task "
                "WHERE task.task_name LIKE :key "
                "AND catalog.id = :id "
@@ -454,7 +457,7 @@ QString queryOption::searchTasks(QString keys){
         }
          qDebug() << "";
     }
-    sqlQuery = "SELECT catalog.id, task.* "
+    sqlQuery = "SELECT catalog.id, task.list_no, task.task_no, task.task_name, task.status "
                "FROM catalog, task "
                "WHERE task.task_name LIKE '%" + keys +
                "%' AND catalog.id = " + getID() +

@@ -23,19 +23,22 @@ task_dialog::task_dialog(QWidget *parent) :
     q.prepare(s);
     q.exec();
     //create table and display
-    model = new QStandardItemModel(q.size(),3,this);
+    model = new QStandardItemModel(q.size(),4,this);
     ui->tableView->setModel(model);
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("cata_no"));
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("task_no"));
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("task_name"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("complete"));
     ui->tableView->setModel(model);
     int row=0;
     while (q.next()) {
-        for(int col = 0; col < 3; col++)
+        for(int col = 0; col < 4; col++)
             {
-                QModelIndex index
-                        = model->index(row,col,QModelIndex());
-                    model->setData(index,q.value(col).toString());
+                    qDebug() << "status: " << q.value(col).toString();
+                    QModelIndex index
+                            = model->index(row,col,QModelIndex());
+                        model->setData(index,q.value(col).toString());
+
             }
         row++;
         }
