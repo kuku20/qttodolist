@@ -14,9 +14,9 @@ QSqlQuery queryOption::qry;
 void queryOption::setCon() {
     dbConnection = QSqlDatabase::addDatabase("QMYSQL");
     dbConnection.setHostName("127.0.0.1");
-    dbConnection.setDatabaseName("todolist");
+    dbConnection.setDatabaseName("test");
     dbConnection.setUserName("root");
-    dbConnection.setPassword("nokia3310");
+    dbConnection.setPassword("");
     if(dbConnection.open()) {
         qDebug() << "Database connected!";
         QSqlQuery q(dbConnection);
