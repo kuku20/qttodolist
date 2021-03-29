@@ -39,11 +39,10 @@ void MainWindow::on_pushButton_clicked()
                 QMessageBox::information(this, "Login", "You are login!!");
                 userlogined=true;
                 close();
-                secondMain secondMain;
-                secondMain.userreturn(username,query.value(3).toString());
-
                 queryOption::accessID(query.value(3).toString());
                 queryOption::accessUser(username);
+                secondMain secondMain;
+//                secondMain.userreturn(username,query.value(3).toString());
                 queryOption::setCon(db);
                 secondMain.setModal(true);
                 secondMain.exec();

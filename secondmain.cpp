@@ -9,27 +9,19 @@
 #include <QTextStream>
 #include "create_todolist_dialog.h"
 
-QString username;
-QString userID;
+
+//QString userID;
 secondMain::secondMain(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::secondMain)
 {
     ui->setupUi(this);
-//    queryOption queryOption;
-//    username=queryOption.getID();
-    ui->label_userdb->setText(username);
+    qDebug()<<"in2nd"<<queryOption::getUser();
+    ui->label_userdb->setText(queryOption::getUser());
 //    this->setWindowTitle("USER Catalog");
     this->setWindowTitle("secondmain");
 }
 
-void secondMain::userreturn(QString userReturn,QString userRID){
-    ui->label_userdb->setText(userReturn);
-    username=userReturn;
-    userID=userRID;
-//    queryOption queryOption;
-//    queryOption.accessID(userID,username);
-}
 
 secondMain::~secondMain()
 {
@@ -46,7 +38,7 @@ void secondMain::on_pushButton_clicked()
 
 void secondMain::on_pushButton_2_clicked()
 {
-    qDebug()<<"username Id:"<<userID;
+//    qDebug()<<"username Id:"<<userID;
     //get the userID then user the queryF
     hide();
     //show all the list of the user and option
