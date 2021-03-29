@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include "queryoption.h"
+#include "createnewacount.h"
 
 //
 MainWindow::MainWindow(QWidget *parent)
@@ -22,8 +23,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-
 void MainWindow::on_pushButton_clicked()
 {
     QString username = ui->lineEdit_userInput->text();
@@ -42,7 +41,7 @@ void MainWindow::on_pushButton_clicked()
                 queryOption::accessID(query.value(3).toString());
                 queryOption::accessUser(username);
                 secondMain secondMain;
-//                secondMain.userreturn(username,query.value(3).toString());
+                secondMain.userreturn(username,query.value(3).toString());
                 queryOption::setCon(db);
                 secondMain.setModal(true);
                 secondMain.exec();
@@ -55,42 +54,9 @@ void MainWindow::on_pushButton_clicked()
     }
 }
 
-
-
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_pushButton_2_clicked()
 {
-    qDebug()<<"NONO";
-    int exist_u = 0;
-    int exist_e=0;
-    QString new_user = ui->lineEdit_Nuser->text();
-    QString new_pass = ui->lineEdit_Npass->text();
-    QString new_email = ui->lineEdit_Nemail->text();
-    qDebug()<<"NONO"<<new_user;
-    queryOption queryOption;
-    exist_u=queryOption.checkIfExist(new_user,"users");
-    exist_e=queryOption.checkIfExist(new_email,"users");
-
-    if(exist_u<0 or exist_e <0){
-        if(exist_u<0){
-            QMessageBox::information(this, "Warning",
-                                     "This User already exist!!!");
-        }
-        else{
-            QMessageBox::information(this, "Warning",
-                                     "This  Email already exist!!!");
-        }
-        }
-    else
-    {
-        qDebug()<<exist_u;
-        QSqlDatabase db = QSqlDatabase::database();
-        QSqlQuery query(db);
-        query.prepare("INSERT INTO users(username, email, password) "
-                          "VALUES (:username, :email, :password)");
-        query.bindValue(":username", new_user);
-        query.bindValue(":email", new_email);
-        query.bindValue(":password", new_pass);
-        query.exec();
-        QMessageBox::information(this, "New account created", "You have create account!!");
-    }
+    createNewAcount createnewacount;
+    createnewacount.setModal(true);
+    createnewacount.exec();
 }

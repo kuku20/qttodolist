@@ -1,7 +1,8 @@
 #include "statistics.h"
 #include "ui_statistics.h"
 #include "queryoption.h"
-#include <QtWidgets/QMainWindow>
+#include "secondmain.h"
+#include <QtWidgets>
 #include <QtCharts/QChartView>
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QPieSlice>
@@ -9,11 +10,11 @@
 QT_CHARTS_USE_NAMESPACE
 
 Statistics::Statistics(QWidget *parent) :
-    QMainWindow(parent),
+    QDialog(parent),
     ui(new Ui::Statistics)
 {
     ui->setupUi(this);
-
+    showPieChart();
 }
 
 Statistics::~Statistics()
@@ -23,9 +24,19 @@ Statistics::~Statistics()
 
 void Statistics::showPieChart() {
     QPieSeries *series = new QPieSeries();
-    double res = inCompleteCount()/totalCount();
-    series->append("Incomplete Task", res);
-    series->append("Total Task", (1-res));
+    int res = inCompleteCount()/totalCount();
+    qDebug() << "res: " << res;
+    series->append("Incomplete Task", 1);
+    series->append("Total Task", 2);
+
+    QPieSlice *inComSlide = series->slices().at(0);
+    inComSlide->setExploded();
+    inComSlide->setLabelVisible();
+    inComSlide->setPen(QPen(Qt::darkRed,2));
+    inComSlide->setBrush(Qt::red);
+
+    QPieSlice *toTalSlide = series->slices().at(1);
+    toTalSlide->setLabelVisible();
 
     QChart *chart = new QChart();
     chart->addSeries(series);
@@ -34,16 +45,29 @@ void Statistics::showPieChart() {
 
     QChartView *chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
-    setCentralWidget(chartView);
-    resize(420,300);
 }
 
 double Statistics::inCompleteCount() {
     QSqlDatabase conn = QSqlDatabase::database();
     QSqlQuery qry(conn);
-    QString sqlQuery = "";
-    double result;
-    return result;
+    QString sqlQuery = "SELECT COUNT(*) FROM catalog c JOIN task t "
+                       "ON c.list_no = t.list_no "
+                       "WHERE c.time BETWEEN date_sub(current_date(), INTERVAL 3 DAY) AND current_date() "
+                       "AND c.id = :id AND t.status = :stat";
+    qry.prepare(sqlQuery);
+    qry.bindValue(":id", queryOption::getID());
+    qry.bindValue(":stat", "NO");
+    if(qry.exec()){
+        qDebug() << "Calculating inCompleteCount...";
+    }
+    else{
+        qDebug() << "ERROR: inCompleteCount failed to return the count";
+        qDebug() << "ERROR: " << qry.lastError().text();
+    }
+    qDebug() << "sqlQuery: " << sqlQuery;
+    qDebug() << "result for inCompleteCount: " <<qry.result();
+
+    return 0;
 }
 
 double Statistics::totalCount() {
@@ -63,7 +87,7 @@ double Statistics::totalCount() {
         qDebug() << "ERROR: " << qry.lastError().text();
     }
     qDebug() << "sqlQuery: " << sqlQuery;
-    double result = qry.value(0).Double;
+    int result = qry.value(0).toInt();
     qDebug() << "result for totalCount: " << result;
     return result;
 }

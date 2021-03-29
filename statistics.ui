@@ -3,7 +3,7 @@
  <comment/>
  <exportmacro/>
  <class>Statistics</class>
- <widget name="Statistics" class="QMainWindow">
+ <widget name="Statistics" class="QDialog">
   <property name="geometry">
    <rect>
     <x>0</x>

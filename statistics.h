@@ -1,13 +1,13 @@
 #ifndef STATISTICS_H
 #define STATISTICS_H
 
-#include <QMainWindow>
+#include <QDialog>
 
 namespace Ui {
 class Statistics;
 }
 
-class Statistics : public QMainWindow
+class Statistics : public QDialog
 {
     Q_OBJECT
 
