@@ -102,7 +102,7 @@ void task_dialog::on_pushButton_3_clicked()
                                                tr(""), &ok);
        if (ok && !newUpdate.isEmpty()){
            queryOption queryOption;
-           queryOption.updateTask(newUpdate, taskNo);
+           queryOption.updateTask(newUpdate, taskNo,"name");
            close();
            task_dialog task_dialog;
            task_dialog.setModal(true);
@@ -120,3 +120,34 @@ void task_dialog::on_pushButton_4_clicked()
     //go back to the catalog
     close();
 }
+void task_dialog::on_tableView_clicked(const QModelIndex &index )
+{
+//    qDebug()<<index.data();
+    int set=index.column();
+    if(set==3){
+        qDebug()<<index.data(1);
+        QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, "DONE??", "Are you finish this task?",
+                                           QMessageBox::Yes|QMessageBox::No);
+             if (reply == QMessageBox::Yes) {
+               qDebug() << "Yes was clicked";
+               queryOption queryOption;
+               queryOption.updateTask("YES", index.siblingAtColumn(1).data().toString(),"complete");
+               close();
+               task_dialog task_dialog;
+               task_dialog.setModal(true);
+               task_dialog.exec();
+
+             } else {
+               qDebug() << "Yes was *not* clicked";
+               queryOption queryOption;
+               queryOption.updateTask("NO", index.siblingAtColumn(1).data().toString(),"complete");
+               close();
+               task_dialog task_dialog;
+               task_dialog.setModal(true);
+               task_dialog.exec();
+             }
+    }
+}
+
+

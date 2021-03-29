@@ -16,8 +16,6 @@ class secondMain : public QDialog
 public:
     explicit secondMain(QWidget *parent = nullptr);
     ~secondMain();
-    void userreturn(QString username,QString userID);
-    int showStat();
 
 private slots:
     void on_pushButton_clicked();
@@ -30,8 +28,13 @@ private slots:
 
     void on_searchBUT_2_clicked();
 
+    void on_calendarWidget_clicked(const QDate &date);
+
+    void on_statBUT_clicked();
+
 private:
     Ui::secondMain *ui;
+
 };
 
 #endif // SECONDMAIN_H

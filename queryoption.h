@@ -40,7 +40,7 @@ class queryOption
         QString getTasks();
         void delTask(QString taskNo);
         void delList(QString listNo);
-        void updateTask(QString newUpdate, QString taskNo);
+        void updateTask(QString newUpdate, QString taskNo,QString kindof);
         void updateList(QString newUpdate, QString listNo);
         void static accessUser(QString user_name);
         static QString getUser();
@@ -48,9 +48,7 @@ class queryOption
         static QString getInputNo();
         int checkIfExist(QString option, QString table);
         QString searchTasks(QString keys);
-        QString searchCata(QString keys);
+        QString searchCata(QString keys,QString kindof);
 };
 
 #endif // QUERYOPTION_H
-
-
