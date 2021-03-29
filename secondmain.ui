@@ -145,7 +145,7 @@
      <x>430</x>
      <y>30</y>
      <width>391</width>
-     <height>471</height>
+     <height>171</height>
     </rect>
    </property>
   </widget>
@@ -180,6 +180,16 @@
    </property>
    <property name="text">
     <string>Task Search</string>
+   </property>
+  </widget>
+  <widget class="QCalendarWidget" name="calendarWidget">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>260</y>
+     <width>376</width>
+     <height>218</height>
+    </rect>
    </property>
   </widget>
  </widget>

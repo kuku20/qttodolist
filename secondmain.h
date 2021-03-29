@@ -29,6 +29,8 @@ private slots:
 
     void on_searchBUT_2_clicked();
 
+    void on_calendarWidget_clicked(const QDate &date);
+
 private:
     Ui::secondMain *ui;
 

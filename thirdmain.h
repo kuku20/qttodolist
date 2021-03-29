@@ -2,11 +2,10 @@
 #define THIRDMAIN_H
 
 #include <QDialog>
-#include "secondmain.h"
+#include"secondmain.h"
 #include <QTableView>
 #include <QItemDelegate>
 #include <QStandardItemModel>
-
 namespace Ui {
 class thirdmain;
 }
@@ -22,8 +21,12 @@ public:
 
 private slots:
     void on_pushButton_3_clicked();
+
+
     void on_pushButton_2_clicked();
+
     void on_pushButton_clicked();
+
     void on_pushButton_5_clicked();
 
 private:

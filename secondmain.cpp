@@ -1,3 +1,4 @@
+
 #include "secondmain.h"
 #include "ui_secondmain.h"
 #include <QMessageBox>
@@ -62,12 +63,12 @@ void secondMain::on_pushButton_3_clicked()
     newmain->show();
 }
 
-
+//search for catalog
 void secondMain::on_searchBUT_clicked()
 {
     queryOption queryAct;
     QString key = ui->sLine->text();
-    QString sqlQuery = queryAct.searchCata(key);
+    QString sqlQuery = queryAct.searchCata(key,"type");
     QSqlQueryModel *smodel = new QSqlQueryModel();
     QSqlDatabase conn = QSqlDatabase::database();
     QSqlQuery qry(conn);
@@ -88,6 +89,27 @@ void secondMain::on_searchBUT_2_clicked()
     queryOption queryAct;
     QString key = ui->sLine->text();
     QString sqlQuery = queryAct.searchTasks(key);
+    QSqlQueryModel *smodel = new QSqlQueryModel();
+    QSqlDatabase conn = QSqlDatabase::database();
+    QSqlQuery qry(conn);
+    qry.prepare(sqlQuery);
+    if(qry.exec()){
+        qDebug() << "Searching...";
+    }
+    else{
+        qDebug() << "ERROR: Failed to find any results";
+        qDebug() << "ERROR: " << qry.lastError().text();
+    }
+    smodel->setQuery(qry);
+    ui->searchView->setModel(smodel);
+}
+
+void secondMain::on_calendarWidget_clicked(const QDate &date)
+{
+    queryOption queryAct;
+    QString date_input= date.toString("yyyy-MM-dd");
+    QString sqlQuery = queryAct.searchCata(date_input,"click");
+    qDebug() << sqlQuery;
     QSqlQueryModel *smodel = new QSqlQueryModel();
     QSqlDatabase conn = QSqlDatabase::database();
     QSqlQuery qry(conn);

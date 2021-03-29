@@ -1,4 +1,3 @@
-
 #include "queryoption.h"
 #include <QMessageBox>
 #include <QDebug>
@@ -313,8 +312,13 @@ void queryOption::delList(QString listNo) {
 // @param newUpdate the name to replace the old name as new name for item name
 // @param itemNo the target task item number that needs to update
 // @return none
-void queryOption::updateTask(QString newUpdate, QString taskNo) {
+void queryOption::updateTask(QString newUpdate, QString taskNo,QString kindof) {
+    if(kindof=="name"){
     sqlQuery =	"UPDATE task SET task_name = :update WHERE task_no = :num";
+    }
+    else{
+    sqlQuery =	"UPDATE task SET status = :update WHERE task_no = :num";
+    }
     qry.prepare(sqlQuery);
     qry.bindValue(":update", newUpdate);
     qry.bindValue(":num", taskNo);
@@ -404,19 +408,33 @@ int queryOption::checkIfExist(QString option, QString table) {
 // return the specific tasks lists
 // @param key: the input to search for specific tasks
 // @return none
-QString queryOption::searchCata(QString keys){
+// return the specific tasks lists
+// @param key: the input to search for specific tasks
+// @return none
+QString queryOption::searchCata(QString keys,QString kindof){
     //make query for search key from table
-    sqlQuery = "SELECT *  "
-               "FROM catalog "
-               "WHERE catalog.list_name LIKE :key AND catalog.id = :id";
-    qry.prepare(sqlQuery);
-    qry.bindValue(":key", "%" + keys + "%");
-    qry.bindValue(":id", getID());
+    if(kindof=="type"){
+        sqlQuery = "SELECT *  "
+                       "FROM catalog "
+                       "WHERE catalog.list_name LIKE :key AND catalog.id = :id";
+            qry.prepare(sqlQuery);
+            qry.bindValue(":key", "%" + keys + "%");
+            qry.bindValue(":id", getID());
+    }
+    else{
+        sqlQuery = "SELECT *  "
+                   "FROM catalog "
+                   "WHERE catalog.time = :key "
+                   "AND catalog.id = :id";
+        qry.prepare(sqlQuery);
+        qry.bindValue(":key", keys);
+        qry.bindValue(":id", getID());
+    }
     if(qry.exec()){
         qDebug() << "Display the Results";
     }
     else{
-        qDebug() << "ERROR: Failed to find any cata";
+        qDebug() << "ERROR: Failed to find any tasks";
         qDebug() << "ERROR: " << qry.lastError().text();
     }
     while (qry.next()) {
@@ -425,12 +443,19 @@ QString queryOption::searchCata(QString keys){
         }
          qDebug() << "";
     }
-    qDebug() << "first query sent: " << sqlQuery;
-    sqlQuery = "SELECT *  "
-               "FROM catalog "
-               "WHERE catalog.list_name LIKE '%" + keys +
-               "%' AND catalog.id = " + getID();
-    qDebug() << "second query sent: " << sqlQuery;
+    if(kindof=="type"){
+        sqlQuery = "SELECT *  "
+                       "FROM catalog "
+                       "WHERE catalog.list_name LIKE '%" + keys +
+                       "%' AND catalog.id = " + getID();
+            qDebug() << "second query sent: " << sqlQuery;
+    }
+    else{
+        sqlQuery = "SELECT *  "
+                   "FROM catalog "
+                   "WHERE catalog.time = '" + keys +
+                   "' AND catalog.id = " + getID();
+    }
     return sqlQuery;
 }
 
@@ -464,6 +489,3 @@ QString queryOption::searchTasks(QString keys){
                " AND catalog.list_no = task.task_no";
     return sqlQuery;
 }
-
-
-

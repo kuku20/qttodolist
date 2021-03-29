@@ -10,7 +10,6 @@ CONFIG += c++11
 
 SOURCES += \
     create_todolist_dialog.cpp \
-    createnewacount.cpp \
     main.cpp \
     mainwindow.cpp \
     queryoption.cpp \
@@ -20,7 +19,6 @@ SOURCES += \
 
 HEADERS += \
     create_todolist_dialog.h \
-    createnewacount.h \
     mainwindow.h \
     queryoption.h \
     secondmain.h \
@@ -29,7 +27,6 @@ HEADERS += \
 
 FORMS += \
     create_todolist_dialog.ui \
-    createnewacount.ui \
     mainwindow.ui \
     secondmain.ui \
     task_dialog.ui \
