@@ -1,19 +1,36 @@
 #include "statistics.h"
 #include "ui_statistics.h"
 #include "queryoption.h"
-#include <QtWidgets/QMainWindow>
-#include <QtCharts/QChartView>
-#include <QtCharts/QPieSeries>
-#include <QtCharts/QPieSlice>
-
-QT_CHARTS_USE_NAMESPACE
 
 Statistics::Statistics(QWidget *parent) :
-    QMainWindow(parent),
+    QDialog(parent),
     ui(new Ui::Statistics)
 {
-    ui->setupUi(this);
+    conn = QSqlDatabase::database();
+    QSqlQuery q(conn);
+    qry.operator=(q);
 
+    ui->setupUi(this);
+    QPieSeries *series = new QPieSeries();
+    series->append("Incomplete Tasks", inCompleteCount());
+    series->append("Complete Tasks", completeCount());
+
+    QPieSlice *slice0 = series->slices().at(0);
+    slice0->setLabelVisible(true);
+    slice0->setPen(QPen(Qt::darkRed,2));
+    slice0->setBrush(Qt::red);
+
+    QPieSlice *slice1 = series->slices().at(1);
+    slice1->setLabelVisible(true);
+    slice1->setPen(QPen(Qt::darkBlue,2));
+    slice1->setBrush(Qt::blue);
+
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("Statistics of Work Effort In Past 3 Days");
+
+    QChartView *cView = new QChartView(chart);
+    cView->setParent(ui->horizontalFrame);
 }
 
 Statistics::~Statistics()
@@ -21,49 +38,40 @@ Statistics::~Statistics()
     delete ui;
 }
 
-void Statistics::showPieChart() {
-    QPieSeries *series = new QPieSeries();
-    double res = inCompleteCount()/totalCount();
-    series->append("Incomplete Task", res);
-    series->append("Total Task", (1-res));
-
-    QChart *chart = new QChart();
-    chart->addSeries(series);
-    chart->setTitle("Statistics of Work Effort In 3 Days");
-    chart->legend()->hide();
-
-    QChartView *chartView = new QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-    setCentralWidget(chartView);
-    resize(420,300);
-}
-
-double Statistics::inCompleteCount() {
-    QSqlDatabase conn = QSqlDatabase::database();
-    QSqlQuery qry(conn);
-    QString sqlQuery = "";
-    double result;
-    return result;
-}
-
-double Statistics::totalCount() {
-    QSqlDatabase conn = QSqlDatabase::database();
-    QSqlQuery qry(conn);
-    QString sqlQuery = "SELECT COUNT(*) FROM catalog c JOIN task t "
-                       "ON c.list_no = t.list_no "
-                       "WHERE c.time BETWEEN date_sub(current_date(), INTERVAL 3 DAY) AND current_date() "
-                       "AND c.id = :id";
+int Statistics::inCompleteCount() {
+    sqlQuery = "SELECT COUNT(*) as taskCount FROM catalog c JOIN task t "
+               "ON c.list_no = t.list_no "
+               "WHERE c.time BETWEEN date_sub(current_date(), INTERVAL 3 DAY) AND current_date() "
+               "AND c.id = :id AND t.status = :stat";
     qry.prepare(sqlQuery);
     qry.bindValue(":id", queryOption::getID());
+    qry.bindValue(":stat", "NO");
     if(qry.exec()){
-        qDebug() << "Calculating totalCount...";
+        qDebug() << "Counting incompleted tasks...";
     }
     else{
-        qDebug() << "ERROR: totalCount failed to return the count";
+        qDebug() << "ERROR: inCompleteCount failed to return the count";
         qDebug() << "ERROR: " << qry.lastError().text();
     }
-    qDebug() << "sqlQuery: " << sqlQuery;
-    double result = qry.value(0).Double;
-    qDebug() << "result for totalCount: " << result;
-    return result;
+    qry.next();
+    return qry.value("taskCount").toInt();
+}
+
+int Statistics::completeCount() {
+    sqlQuery = "SELECT COUNT(*) as taskCount FROM catalog c JOIN task t "
+               "ON c.list_no = t.list_no "
+               "WHERE c.time BETWEEN date_sub(current_date(), INTERVAL 3 DAY) AND current_date() "
+               "AND c.id = :id AND t.status = :stat";
+    qry.prepare(sqlQuery);
+    qry.bindValue(":id", queryOption::getID());
+    qry.bindValue(":stat", "YES");
+    if(qry.exec()){
+        qDebug() << "Counting completed tasks...";
+    }
+    else{
+        qDebug() << "ERROR: completeCount failed to return the count";
+        qDebug() << "ERROR: " << qry.lastError().text();
+    }
+    qry.next();
+    return qry.value("taskCount").toInt();
 }

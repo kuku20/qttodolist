@@ -8,6 +8,7 @@
 #include "mainwindow.h"
 #include <QTextStream>
 #include "create_todolist_dialog.h"
+#include "statistics.h"
 
 
 //QString userID;
@@ -115,4 +116,11 @@ void secondMain::on_calendarWidget_clicked(const QDate &date)
     }
     smodel->setQuery(qry);
     ui->searchView->setModel(smodel);
+}
+
+void secondMain::on_statBUT_clicked()
+{
+    Statistics stat;
+    stat.setModal(true);
+    stat.exec();
 }

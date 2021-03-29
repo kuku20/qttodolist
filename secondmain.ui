@@ -71,7 +71,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>460</y>
+     <y>520</y>
      <width>361</width>
      <height>41</height>
     </rect>
@@ -190,6 +190,24 @@
      <width>376</width>
      <height>218</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="statBUT">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>430</y>
+     <width>361</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Statistics</string>
    </property>
   </widget>
  </widget>

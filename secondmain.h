@@ -30,6 +30,8 @@ private slots:
 
     void on_calendarWidget_clicked(const QDate &date);
 
+    void on_statBUT_clicked();
+
 private:
     Ui::secondMain *ui;
 
