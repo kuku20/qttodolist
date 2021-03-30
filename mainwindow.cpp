@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle("Wellcom to TO_DO_LIST");
+        //call the database
         queryOption queryOption;
         queryOption::setCon();
        queryOption.createUser();
@@ -22,7 +23,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
+//user click the login button
 
 void MainWindow::on_pushButton_clicked()
 {
@@ -35,14 +36,16 @@ void MainWindow::on_pushButton_clicked()
     while (query.next()) {
             QString usernamedb = query.value(2).toString();
             QString passdb = query.value(1).toString();
+        //compare to the database
             if(username==usernamedb && password==passdb){
                 QMessageBox::information(this, "Login", "You are login!!");
                 userlogined=true;
                 close();
+                //set the username and user Id
                 queryOption::accessID(query.value(3).toString());
                 queryOption::accessUser(username);
                 secondMain secondMain;
-//                secondMain.userreturn(username,query.value(3).toString());
+                //open the second dialog
                 queryOption::setCon(db);
                 secondMain.setModal(true);
                 secondMain.exec();
@@ -56,20 +59,20 @@ void MainWindow::on_pushButton_clicked()
 }
 
 
-
+/*
+This function to give user to create new account
+*/
 void MainWindow::on_pushButton_3_clicked()
 {
-    qDebug()<<"NONO";
     int exist_u = 0;
     int exist_e=0;
     QString new_user = ui->lineEdit_Nuser->text();
     QString new_pass = ui->lineEdit_Npass->text();
     QString new_email = ui->lineEdit_Nemail->text();
-    qDebug()<<"NONO"<<new_user;
     queryOption queryOption;
+    //check if the user or email exist in the database
     exist_u=queryOption.checkIfExist(new_user,"users");
     exist_e=queryOption.checkIfExist(new_email,"users");
-
     if(exist_u<0 or exist_e <0){
         if(exist_u<0){
             QMessageBox::information(this, "Warning",
@@ -82,7 +85,7 @@ void MainWindow::on_pushButton_3_clicked()
         }
     else
     {
-        qDebug()<<exist_u;
+        //add to the database
         QSqlDatabase db = QSqlDatabase::database();
         QSqlQuery query(db);
         query.prepare("INSERT INTO users(username, email, password) "
