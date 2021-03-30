@@ -58,10 +58,11 @@ void task_dialog::on_pushButton_clicked()
                                             tr("Input taskName:"), QLineEdit::Normal,
                                             tr(""), &ok);
        if (ok && !catalogI.isEmpty()){
-           qDebug() << catalogI;
+            //call the query to add data to list
            queryOption queryOption;
            queryOption.newTask(catalogI);
            close();
+           //close and reopen to refesh the display
            task_dialog task_dialog;
            task_dialog.setModal(true);
            task_dialog.exec();
@@ -73,7 +74,6 @@ void task_dialog::on_pushButton_clicked()
 void task_dialog::on_pushButton_2_clicked()
 {
     //choice task_no to delete
-    //queryOption::delTask(QString taskNo)
     QString taskNo = QInputDialog::getText(this, tr("Which catalog???: "),
                                             tr("Input taskNo:"), QLineEdit::Normal,
                                             tr(""), &ok);
@@ -81,6 +81,7 @@ void task_dialog::on_pushButton_2_clicked()
            queryOption queryOption;
            queryOption.delTask(taskNo);
            close();
+           //close and reopen to refesh the display
            task_dialog task_dialog;
            task_dialog.setModal(true);
            task_dialog.exec();
@@ -92,7 +93,6 @@ void task_dialog::on_pushButton_2_clicked()
 void task_dialog::on_pushButton_3_clicked()
 {
     //choice task_no to change name
-    //queryOption::updateTask(QString newUpdate, QString taskNo)
     QString taskNo = QInputDialog::getText(this, tr("Task_no to update???: "),
                                             tr("Input Task_no to update:"), QLineEdit::Normal,
                                             tr(""), &ok);
@@ -104,6 +104,7 @@ void task_dialog::on_pushButton_3_clicked()
            queryOption queryOption;
            queryOption.updateTask(newUpdate, taskNo,"name");
            close();
+           //close and reopen to refesh the display
            task_dialog task_dialog;
            task_dialog.setModal(true);
            task_dialog.exec();
@@ -120,9 +121,9 @@ void task_dialog::on_pushButton_4_clicked()
     //go back to the catalog
     close();
 }
+//click the task to set it complete or not
 void task_dialog::on_tableView_clicked(const QModelIndex &index )
 {
-//    qDebug()<<index.data();
     int set=index.column();
     if(set==3){
         qDebug()<<index.data(1);
@@ -133,6 +134,7 @@ void task_dialog::on_tableView_clicked(const QModelIndex &index )
                qDebug() << "Yes was clicked";
                queryOption queryOption;
                queryOption.updateTask("YES", index.siblingAtColumn(1).data().toString(),"complete");
+                //close and reopen to refesh the display
                close();
                task_dialog task_dialog;
                task_dialog.setModal(true);
@@ -142,6 +144,7 @@ void task_dialog::on_tableView_clicked(const QModelIndex &index )
                qDebug() << "Yes was *not* clicked";
                queryOption queryOption;
                queryOption.updateTask("NO", index.siblingAtColumn(1).data().toString(),"complete");
+                //close and reopen to refesh the display
                close();
                task_dialog task_dialog;
                task_dialog.setModal(true);
