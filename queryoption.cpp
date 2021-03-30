@@ -14,9 +14,10 @@ QSqlQuery queryOption::qry;
 void queryOption::setCon() {
     dbConnection = QSqlDatabase::addDatabase("QMYSQL");
     dbConnection.setHostName("127.0.0.1");
-    dbConnection.setDatabaseName("test");
+    dbConnection.setDatabaseName("todo");
     dbConnection.setUserName("root");
-    dbConnection.setPassword("");
+    dbConnection.setPassword("123456");
+    dbConnection.setPort(3306);
     if(dbConnection.open()) {
         qDebug() << "Database connected!";
         QSqlQuery q(dbConnection);
@@ -27,7 +28,10 @@ void queryOption::setCon() {
         qDebug() << "ERROR: " << dbConnection.lastError().text();
     }
 }
-
+/**
+ * @brief queryOption::setCon set connection to the database
+ * @param conn
+ */
 void queryOption::setCon(QSqlDatabase conn) {
     if(conn.open()) {
         dbConnection = conn;
@@ -77,9 +81,8 @@ void queryOption::createCatalog() {
 }
 
 // create task table for all the tasks inside todo lists
-// item_no is the primary key of this table
+// task_no is the primary key of this table
 // @param none
-// @return none
 void queryOption::createTaskTable() {
     sqlQuery =	"CREATE TABLE IF NOT EXISTS Task ("
                 "list_no INT NOT NULL, task_no INT NOT NULL, task_name VARCHAR(50) NOT NULL,"
@@ -89,12 +92,11 @@ void queryOption::createTaskTable() {
         qDebug() << "Task table created!";
     else
         qDebug() << "ERROR: createTaskTable query failed.";
-
 }
 
 // create a new todo list in catalog table
 // @param list_name the name of the todo list that input by user
-// @return none
+// @param dateInsert the date that user choose
 void queryOption::newList(QString list_name, QString dateInsert) {
     QString listNo = genListNo();
     sqlQuery = "INSERT INTO Catalog (id, list_no, list_name, time) VALUES(:id, :no, :name, :date)";
@@ -112,9 +114,7 @@ void queryOption::newList(QString list_name, QString dateInsert) {
 }
 
 // create a new task in the task table
-// @param list_no the specific todo list user want to add task in it
 // @param task_name the name of the task input by user
-// @return none
 void queryOption::newTask(QString task_name) {
     QString taskNo = genTaskNo();
     sqlQuery = "INSERT INTO Task VALUES(:listNo, :taskNo, :name, :stat)";
@@ -133,8 +133,7 @@ void queryOption::newTask(QString task_name) {
 
 
 // generate the list number which has not been used in the catalog table, and always check the available number from 0
-// @param none
-// @return numCheck the list number that has not been used in the catalog table
+// @return the generated number
 QString queryOption::genListNo() {
     int genNo = 0;
     do {
@@ -154,7 +153,7 @@ QString queryOption::genListNo() {
 
 // generate the task number which has not been used in the task table, and always check the available number from 0
 // @param none
-// @return numCheck the task number that has not been used in the task table
+// @return the generated number
 QString queryOption::genTaskNo() {
     int genNo = 0;
     do {
@@ -189,7 +188,7 @@ QString queryOption::getID() {
 
 // display all the todo list the current user has in the catalog table
 // @param none
-// @return none
+// @return sqlQuery for geting list table
 QString queryOption::getLists() {
     sqlQuery =	"SELECT list_no, list_name, time "
                 "FROM Catalog "
@@ -217,9 +216,8 @@ QString queryOption::getLists() {
     return sqlQuery;
 }
 
-// display all the task items inside the todo list that current user has in the list table
-// @param listNo the todo list that current user want to access into it
-// @return none
+// display all the task inside the todo list that current user has in the task table
+// @return sqlQuery for getting the task table
 QString queryOption::getTasks() {
     sqlQuery = "SELECT task.list_no, task.task_no, task.task_name, task.status, catalog.id "
         "FROM catalog "
@@ -252,8 +250,8 @@ QString queryOption::getTasks() {
     return sqlQuery;
 }
 
-// delete one task item in the list table
-// @param itemNo the specific item that current user want to delete
+// delete one task in the list table
+// @param taskNo the specific item that current user want to delete
 // @return none
 void queryOption::delTask(QString taskNo) {
     sqlQuery = "DELETE FROM task WHERE task_no = :taskNo";
@@ -267,7 +265,7 @@ void queryOption::delTask(QString taskNo) {
     }
 }
 
-//delete the todo list including the task items inside the list
+//delete the todo list including the task inside the list
 //@param listNo the specific todo list number that current user want to delete
 //@return none
 void queryOption::delList(QString listNo) {
@@ -308,9 +306,10 @@ void queryOption::delList(QString listNo) {
     }
 }
 
-// update a task item's name in the list table
+// update a task's name in the task table
 // @param newUpdate the name to replace the old name as new name for item name
-// @param itemNo the target task item number that needs to update
+// @param taskNo the target task item number that needs to update
+// @param kindof update either the task name or task status
 // @return none
 void queryOption::updateTask(QString newUpdate, QString taskNo,QString kindof) {
     if(kindof=="name"){
@@ -349,7 +348,7 @@ void queryOption::updateList(QString newUpdate, QString listNo) {
 
 /**
  * @brief queryOption::accessUser store the current user in the variable
- * @param user_name
+ * @param user_name current user name
  */
 void queryOption::accessUser(QString user_name) {
     currentUser = user_name;
@@ -409,11 +408,9 @@ int queryOption::checkIfExist(QString option, QString table) {
 }
 
 // return the specific tasks lists
-// @param key: the input to search for specific tasks
-// @return none
-// return the specific tasks lists
-// @param key: the input to search for specific tasks
-// @return none
+// @param key the input to search for specific tasks
+// @param kindof search the list either by date or by name
+// @return sqlQuery to search the lists
 QString queryOption::searchCata(QString keys,QString kindof){
     //this is for the sqlQuery when the user insert to seach cata
     if(kindof=="type"){
@@ -465,6 +462,11 @@ QString queryOption::searchCata(QString keys,QString kindof){
     return sqlQuery;
 }
 
+/**
+ * @brief queryOption::searchTasks search the specific task that contain the key
+ * @param keys the keywords search in the table
+ * @return sqlQuery to search the tasks
+ */
 QString queryOption::searchTasks(QString keys){
     //make query for search key from table
     sqlQuery = "SELECT catalog.id, task.list_no, task.task_no, task.task_name, task.status "

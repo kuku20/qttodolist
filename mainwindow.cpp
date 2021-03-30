@@ -93,7 +93,10 @@ void MainWindow::on_pushButton_3_clicked()
         query.bindValue(":username", new_user);
         query.bindValue(":email", new_email);
         query.bindValue(":password", new_pass);
-        query.exec();
-        QMessageBox::information(this, "New account created", "You have create account!!");
+        if(query.exec()) {
+            QMessageBox::information(this, "New account created", "You have create account!!");
+        }
+        else
+            qDebug() << "ERROR: " << query.lastError().text();
     }
 }

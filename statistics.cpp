@@ -2,6 +2,10 @@
 #include "ui_statistics.h"
 #include "queryoption.h"
 
+/**
+ * @brief Statistics::Statistics setting up the pie chart and display
+ * @param parent
+ */
 Statistics::Statistics(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Statistics)
@@ -44,6 +48,10 @@ Statistics::~Statistics()
     delete ui;
 }
 
+/**
+ * @brief Statistics::inCompleteCount
+ * @return counting number of incomplete task in past 3 days
+ */
 int Statistics::inCompleteCount() {
     sqlQuery = "SELECT COUNT(*) as taskCount FROM catalog c JOIN task t "
                "ON c.list_no = t.list_no "
@@ -63,6 +71,10 @@ int Statistics::inCompleteCount() {
     return qry.value("taskCount").toInt();
 }
 
+/**
+ * @brief Statistics::completeCount
+ * @return counting number of complete task in past 3 days
+ */
 int Statistics::completeCount() {
     sqlQuery = "SELECT COUNT(*) as taskCount FROM catalog c JOIN task t "
                "ON c.list_no = t.list_no "
