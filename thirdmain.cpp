@@ -17,7 +17,7 @@ thirdmain::thirdmain(QWidget *parent) :
     queryOption queryOption;
     QSqlDatabase db = QSqlDatabase::database();
     QSqlQuery q(db);
-    qDebug()<<"ki"<<queryOption.getUser().toUpper();
+    //to show the username
     ui->label->setText(queryOption.getUser().toUpper()+"'s Catalogs : ");
     //get data
     QString s=queryOption.getLists();
@@ -63,7 +63,7 @@ void thirdmain::on_pushButton_2_clicked()
            return ;
        }
     queryOption queryOption;
-    //seach if list_no in the user
+    //search if list_no in the user
     QString scan= "catalog WHERE id ="+queryOption.getID();
     int exist=0;
      exist=queryOption.checkIfExist(inNum,scan);
@@ -117,7 +117,6 @@ void thirdmain::on_pushButton_clicked()
 void thirdmain::on_pushButton_5_clicked()
 {
     //change catalog name
-    // queryOption::updateList(QString newUpdate, QString listNo)
     bool ok;
     QString list_no = QInputDialog::getText(this, tr("Which catalog???: "),
                                             tr("Input the list_no:"), QLineEdit::Normal,
