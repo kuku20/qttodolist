@@ -388,6 +388,9 @@ QString queryOption::getInputNo() {
 //* @return exist
 int queryOption::checkIfExist(QString option, QString table) {
     sqlQuery="SELECT * FROM " + table;
+    //depend on the table to select
+    //if table is user sqlQuery.length()==19
+    //if table is catalog sqlQuery.length()==21
     qry.prepare(sqlQuery);
     qry.exec();
     int exist = 0;
@@ -412,7 +415,7 @@ int queryOption::checkIfExist(QString option, QString table) {
 // @param key: the input to search for specific tasks
 // @return none
 QString queryOption::searchCata(QString keys,QString kindof){
-    //make query for search key from table
+    //this is for the sqlQuery when the user insert to seach cata
     if(kindof=="type"){
         sqlQuery = "SELECT *  "
                        "FROM catalog "
@@ -422,6 +425,7 @@ QString queryOption::searchCata(QString keys,QString kindof){
             qry.bindValue(":id", getID());
     }
     else{
+        //this is for the sqlQuery when the user click the calendar
         sqlQuery = "SELECT *  "
                    "FROM catalog "
                    "WHERE catalog.time = :key "
@@ -443,6 +447,7 @@ QString queryOption::searchCata(QString keys,QString kindof){
         }
          qDebug() << "";
     }
+    //this is for the sqlQuery when the user insert to seach cata
     if(kindof=="type"){
         sqlQuery = "SELECT *  "
                        "FROM catalog "
@@ -451,6 +456,7 @@ QString queryOption::searchCata(QString keys,QString kindof){
             qDebug() << "second query sent: " << sqlQuery;
     }
     else{
+        //this is for the sqlQuery when the user click the calendar
         sqlQuery = "SELECT *  "
                    "FROM catalog "
                    "WHERE catalog.time = '" + keys +
