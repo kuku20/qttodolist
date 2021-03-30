@@ -75,7 +75,7 @@ void task_dialog::on_pushButton_2_clicked()
     //choice task_no to delete
     //queryOption::delTask(QString taskNo)
     QString taskNo = QInputDialog::getText(this, tr("Which catalog???: "),
-                                            tr("Input taskName:"), QLineEdit::Normal,
+                                            tr("Input taskNo:"), QLineEdit::Normal,
                                             tr(""), &ok);
        if (ok && !taskNo.isEmpty()){
            queryOption queryOption;

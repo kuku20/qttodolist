@@ -7,6 +7,7 @@ Statistics::Statistics(QWidget *parent) :
     ui(new Ui::Statistics)
 {
     conn = QSqlDatabase::database();
+    QFont font;
     QSqlQuery q(conn);
     qry.operator=(q);
 
@@ -16,16 +17,21 @@ Statistics::Statistics(QWidget *parent) :
     series->append("Complete Tasks", completeCount());
 
     QPieSlice *slice0 = series->slices().at(0);
+    font.setPixelSize(14);
     slice0->setLabelVisible(true);
+    slice0->setLabelFont(font);
     slice0->setPen(QPen(Qt::darkRed,2));
     slice0->setBrush(Qt::red);
 
     QPieSlice *slice1 = series->slices().at(1);
     slice1->setLabelVisible(true);
+    slice1->setLabelFont(font);
     slice1->setPen(QPen(Qt::darkBlue,2));
     slice1->setBrush(Qt::blue);
 
     QChart *chart = new QChart();
+    font.setPixelSize(20);
+    chart->setTitleFont(font);
     chart->addSeries(series);
     chart->setTitle("Statistics of Work Effort In Past 3 Days");
 

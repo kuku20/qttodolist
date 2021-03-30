@@ -61,40 +61,44 @@ void secondMain::on_searchBUT_clicked()
 {
     queryOption queryAct;
     QString key = ui->sLine->text();
-    QString sqlQuery = queryAct.searchCata(key,"type");
-    QSqlQueryModel *smodel = new QSqlQueryModel();
-    QSqlDatabase conn = QSqlDatabase::database();
-    QSqlQuery qry(conn);
-    qry.prepare(sqlQuery);
-    if(qry.exec()){
-        qDebug() << "Searching...";
+    if(key != "") {
+        QString sqlQuery = queryAct.searchCata(key,"type");
+        QSqlQueryModel *smodel = new QSqlQueryModel();
+        QSqlDatabase conn = QSqlDatabase::database();
+        QSqlQuery qry(conn);
+        qry.prepare(sqlQuery);
+        if(qry.exec()){
+            qDebug() << "Searching...";
+        }
+        else{
+            qDebug() << "ERROR: Failed to find any results";
+            qDebug() << "ERROR: " << qry.lastError().text();
+        }
+        smodel->setQuery(qry);
+        ui->searchView->setModel(smodel);
     }
-    else{
-        qDebug() << "ERROR: Failed to find any results";
-        qDebug() << "ERROR: " << qry.lastError().text();
-    }
-    smodel->setQuery(qry);
-    ui->searchView->setModel(smodel);
 }
 
 void secondMain::on_searchBUT_2_clicked()
 {
     queryOption queryAct;
     QString key = ui->sLine->text();
-    QString sqlQuery = queryAct.searchTasks(key);
-    QSqlQueryModel *smodel = new QSqlQueryModel();
-    QSqlDatabase conn = QSqlDatabase::database();
-    QSqlQuery qry(conn);
-    qry.prepare(sqlQuery);
-    if(qry.exec()){
-        qDebug() << "Searching...";
+    if(key != "") {
+        QString sqlQuery = queryAct.searchTasks(key);
+        QSqlQueryModel *smodel = new QSqlQueryModel();
+        QSqlDatabase conn = QSqlDatabase::database();
+        QSqlQuery qry(conn);
+        qry.prepare(sqlQuery);
+        if(qry.exec()){
+            qDebug() << "Searching...";
+        }
+        else{
+            qDebug() << "ERROR: Failed to find any results";
+            qDebug() << "ERROR: " << qry.lastError().text();
+        }
+        smodel->setQuery(qry);
+        ui->searchView->setModel(smodel);
     }
-    else{
-        qDebug() << "ERROR: Failed to find any results";
-        qDebug() << "ERROR: " << qry.lastError().text();
-    }
-    smodel->setQuery(qry);
-    ui->searchView->setModel(smodel);
 }
 
 void secondMain::on_calendarWidget_clicked(const QDate &date)

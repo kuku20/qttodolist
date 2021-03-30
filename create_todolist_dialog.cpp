@@ -32,38 +32,25 @@ void create_todolist_dialog::on_pushButton_clicked()
     QString list_name = ui->lineEdit->text();
     queryOption queryOption;
     exist_u=queryOption.checkIfExist(list_name,"catalog");
-    if(exist_u<0 or list_name=="" or getdate()==""){
+    if(exist_u<0){
         QMessageBox::warning(this, "Warning",
-                                 "This  catalog already exist!!!");
-        }
-    else
-    {
+                             "This  catalog already exist!!!");
+    }
+    else if( list_name==""){
+        QMessageBox::warning(this, "Warning",
+                             "Please input name catalog !!!");
+    }
+    else if(getdate()==""){
+        QMessageBox::warning(this, "Warning",
+                             "Please choose date!!!");
+    }
+    else{
         queryOption.newList(list_name, getdate());
         QMessageBox::information(this,"Create catalog",
-                             "the " +list_name+" created.");
-//        QMessageBox::StandardButton reply;
-////        while(reply != QMessageBox::No){
-//            reply = QMessageBox::question(this, "Add Task", "Do you want to go to this catalog"
-//                                                            "to this ?",
-//                                           QMessageBox::Yes|QMessageBox::No);
-//             if (reply == QMessageBox::Yes) {
-//               qDebug() << "Yes was clicked";
-//               close();
-//               close();
-//               thirdmain thirdmain;
-//               thirdmain.setModal(true);
-//               thirdmain.exec();
-//    //           QApplication::quit();
-//             } else {
-//               qDebug() << "Yes was *not* clicked";
-//             }
-
-////        }
+                                 "the " +list_name+" created.");
         close();
 
     }
-
-
 }
 
 void create_todolist_dialog::on_calendarWidget_clicked(const QDate &date)
