@@ -30,8 +30,6 @@ secondMain::secondMain(QWidget *parent) :
     else{
         ui->pushButton_nt->setStyleSheet("background-color: green");
     }
-
-    //
 }
 int secondMain::send_mail_notic()
 {

@@ -69,7 +69,7 @@ void queryOption::createUser() {
 // @return none
 void queryOption::createCatalog() {
     sqlQuery =	"CREATE TABLE IF NOT EXISTS Catalog ("
-                "id INT NOT NULL, list_no INT NOT NULL, list_name VARCHAR(50) NOT NULL, time DATE NOT NULL,"
+                "id INT NOT NULL, list_no INT NOT NULL, list_name VARCHAR(50) NOT NULL, time DATE NOT NULL,noti VARCHAR(3) NOT NULL,"
                 "PRIMARY KEY(list_no));";
     qry.prepare(sqlQuery);
     if(qry.exec())

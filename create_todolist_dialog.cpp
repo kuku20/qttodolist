@@ -63,4 +63,3 @@ void create_todolist_dialog::on_calendarWidget_clicked(const QDate &date)
     QString date_input= date.toString("yyyy-MM-dd");
     set_date(date_input);
 }
-

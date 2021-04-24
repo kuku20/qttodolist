@@ -1,5 +1,4 @@
-QT       += core gui
-QT += sql
+QT       += core gui sql network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -14,6 +13,8 @@ SOURCES += \
     mainwindow.cpp \
     queryoption.cpp \
     secondmain.cpp \
+    sent_notification.cpp \
+    statistics.cpp \
     task_dialog.cpp \
     thirdmain.cpp
 
@@ -22,6 +23,8 @@ HEADERS += \
     mainwindow.h \
     queryoption.h \
     secondmain.h \
+    sent_notification.h \
+    statistics.h \
     task_dialog.h \
     thirdmain.h
 
@@ -29,6 +32,7 @@ FORMS += \
     create_todolist_dialog.ui \
     mainwindow.ui \
     secondmain.ui \
+    statistics.ui \
     task_dialog.ui \
     thirdmain.ui
 

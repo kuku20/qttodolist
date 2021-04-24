@@ -4,6 +4,7 @@
 #include <QInputDialog>
 
 bool ok;
+queryOption queryOption;
 
 task_dialog::task_dialog(QWidget *parent) :
     QDialog(parent),
@@ -11,7 +12,7 @@ task_dialog::task_dialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("USER task list__task_dialog.cpp");
-    queryOption queryOption;
+
     QSqlDatabase db = QSqlDatabase::database();
     QSqlQuery q(db);
 
@@ -59,7 +60,6 @@ void task_dialog::on_pushButton_clicked()
                                             tr(""), &ok);
        if (ok && !catalogI.isEmpty()){
             //call the query to add data to list
-           queryOption queryOption;
            queryOption.newTask(catalogI);
            close();
            //close and reopen to refesh the display
@@ -78,7 +78,6 @@ void task_dialog::on_pushButton_2_clicked()
                                             tr("Input taskNo:"), QLineEdit::Normal,
                                             tr(""), &ok);
        if (ok && !taskNo.isEmpty()){
-           queryOption queryOption;
            queryOption.delTask(taskNo);
            close();
            //close and reopen to refesh the display
@@ -101,7 +100,6 @@ void task_dialog::on_pushButton_3_clicked()
                                                tr("Input new taskName:"), QLineEdit::Normal,
                                                tr(""), &ok);
        if (ok && !newUpdate.isEmpty()){
-           queryOption queryOption;
            queryOption.updateTask(newUpdate, taskNo,"name");
            close();
            //close and reopen to refesh the display
@@ -132,7 +130,6 @@ void task_dialog::on_tableView_clicked(const QModelIndex &index )
                                            QMessageBox::Yes|QMessageBox::No);
              if (reply == QMessageBox::Yes) {
                qDebug() << "Yes was clicked";
-               queryOption queryOption;
                queryOption.updateTask("YES", index.siblingAtColumn(1).data().toString(),"complete");
                 //close and reopen to refesh the display
                close();
@@ -142,7 +139,6 @@ void task_dialog::on_tableView_clicked(const QModelIndex &index )
 
              } else {
                qDebug() << "Yes was *not* clicked";
-               queryOption queryOption;
                queryOption.updateTask("NO", index.siblingAtColumn(1).data().toString(),"complete");
                 //close and reopen to refesh the display
                close();
@@ -152,5 +148,3 @@ void task_dialog::on_tableView_clicked(const QModelIndex &index )
              }
     }
 }
-
-

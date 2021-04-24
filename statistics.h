@@ -2,10 +2,11 @@
 #define STATISTICS_H
 
 #include <QDialog>
-#include <QtCharts>
-#include <QChartView>
-#include <QPieSeries>
-#include <QPieSlice>
+
+//#include <QtCharts>
+//#include <QChartView>
+//#include <QPieSeries>
+//#include <QPieSlice>
 #include <QtSql>
 #include <QSqlDatabase>
 #include <QSqlQuery>

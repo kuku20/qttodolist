@@ -14,6 +14,7 @@ class create_todolist_dialog : public QDialog
 public:
     explicit create_todolist_dialog(QWidget *parent = nullptr);
     ~create_todolist_dialog();
+    QString get_date;
     QString getdate();
     void set_date(QString get_date_input);
 
