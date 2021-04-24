@@ -14,9 +14,9 @@ QSqlQuery queryOption::qry;
 void queryOption::setCon() {
     dbConnection = QSqlDatabase::addDatabase("QMYSQL");
     dbConnection.setHostName("127.0.0.1");
-    dbConnection.setDatabaseName("todo");
+    dbConnection.setDatabaseName("test");
     dbConnection.setUserName("root");
-    dbConnection.setPassword("123456");
+    dbConnection.setPassword("");
     dbConnection.setPort(3306);
     if(dbConnection.open()) {
         qDebug() << "Database connected!";
@@ -335,13 +335,16 @@ void queryOption::updateTask(QString newUpdate, QString taskNo,QString kindof) {
 // @return none
 void queryOption::updateList(QString newUpdate, QString listNo) {
     sqlQuery = "UPDATE catalog SET list_name = :update WHERE list_no = :num";
+    if(newUpdate=="YES" || newUpdate=="NO"){
+       sqlQuery = "UPDATE catalog SET noti = :update WHERE list_no = :num";
+    }
     qry.prepare(sqlQuery);
     qry.bindValue(":update", newUpdate);
     qry.bindValue(":num", listNo);
     if(qry.exec())
-        qDebug() << "The task name has been changed.";
+        qDebug() << "The catalog_database has been changed.";
     else {
-        qDebug() << "ERROR: updateTask failed to update the task name.";
+        qDebug() << "ERROR: updateList failed to update the task name.";
         qDebug() << "ERROR: " << qry.lastError().text();
     }
 }
