@@ -16,6 +16,7 @@ class secondMain : public QDialog
 public:
     explicit secondMain(QWidget *parent = nullptr);
     ~secondMain();
+    int send_mail_notic();
 
 private slots:
     void on_pushButton_clicked();
@@ -31,6 +32,8 @@ private slots:
     void on_calendarWidget_clicked(const QDate &date);
 
     void on_statBUT_clicked();
+
+    void on_pushButton_nt_clicked();
 
 private:
     Ui::secondMain *ui;
